@@ -1833,6 +1833,35 @@ html[data-theme="blue"] {
     transform: translateY(-2px);
 }
 
+.micStatus {
+    max-width: 430px;
+    margin-top: 12px;
+    color: #766;
+    font-size: .78rem;
+    line-height: 1.45;
+}
+
+.micStatus.isListening {
+    color: var(--color-text-pink);
+    font-weight: 700;
+}
+
+.micStatus.isListening::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 7px;
+    border-radius: 50%;
+    background: #38b76b;
+    box-shadow: 0 0 0 5px rgba(56, 183, 107, .16);
+    animation: listeningPulse 1s infinite alternate;
+}
+
+@keyframes listeningPulse {
+    to { transform: scale(1.3); }
+}
+
 .candleButton {
     position: relative;
     width: min(100%, 380px);
