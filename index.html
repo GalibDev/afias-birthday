@@ -415,6 +415,7 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     };
 
     function closeFeatures(restoreFocus = true) {
+        if (blowStream || blowAudioContext) stopBlowDetection();
         Object.values(featurePanels).forEach(panel => {
             panel.classList.remove('isOpen');
             panel.setAttribute('aria-hidden', 'true');
@@ -613,6 +614,10 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     micBlowButton.addEventListener('click', () => {
         if (micBlowButton.getAttribute('aria-pressed') === 'true') stopBlowDetection();
         else startBlowDetection();
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden && (blowStream || blowAudioContext)) stopBlowDetection();
     });
 
     candleButton.addEventListener('click', () => {
