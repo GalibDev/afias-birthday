@@ -174,7 +174,7 @@
                 <div class="cakeCopy">
                     <p class="eyebrow">One last birthday wish</p>
                     <h2 id="cakeTitle">Make a wish, Afia!</h2>
-                    <p>Tap the candle to blow it out. No microphone permission needed.</p>
+                    <p>Enable the microphone and blow toward your phone, or tap the candle as a fallback.</p>
                     <button class="micBlowButton" id="micBlowButton" type="button" aria-pressed="false">
                         <i class="fa-solid fa-microphone" aria-hidden="true"></i>
                         <span>Enable blow detection</span>
@@ -351,7 +351,7 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         clearInterval(dateTimer);
         clearTimeout(dateStartTimer);
         dateText.textContent = '';
-        dateStartTimer = window.setTimeout(typeBirthdayDate, 2900);
+        dateStartTimer = window.setTimeout(typeBirthdayDate, 6400);
     }
 
     function celebrate(originX = '50vw', originY = '58vh') {
