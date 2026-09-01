@@ -174,12 +174,12 @@
                 <div class="cakeCopy">
                     <p class="eyebrow">One last birthday wish</p>
                     <h2 id="cakeTitle">Make a wish, Afia!</h2>
-                    <p>Enable the microphone and blow toward your phone, or tap the candle as a fallback.</p>
+                    <p>Enable the microphone, bring your phone close, and blow steadily to make your wish.</p>
                     <button class="micBlowButton" id="micBlowButton" type="button" aria-pressed="false">
                         <i class="fa-solid fa-microphone" aria-hidden="true"></i>
                         <span>Enable blow detection</span>
                     </button>
-                    <p class="micStatus" aria-live="polite">Microphone is off. Tap the button to blow out the candle.</p>
+                    <p class="micStatus" aria-live="polite">Microphone is off. Enable it when you are ready to blow.</p>
                     <p class="cakeStatus" aria-live="polite">The candle is waiting for your wish ✨</p>
                     <div class="wishReveal" aria-hidden="true">
                         <p>May this new chapter bring you everything your heart wishes for.</p>
@@ -188,7 +188,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="candleButton" type="button" aria-label="Blow out the birthday candle">
+                <div class="candleButton" aria-hidden="true">
                     <span class="cake" aria-hidden="true">
                         <span class="candle">
                             <span class="smokePuffs"><i></i><i></i><i></i></span>
@@ -201,8 +201,7 @@
                         <span class="cakeLayer cakeLayerBottom"></span>
                         <span class="cakePlate"></span>
                     </span>
-                    <span class="candleAction">Tap the candle</span>
-                </button>
+                </div>
             </section>
         </main>
 
@@ -399,8 +398,6 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         closeFeatures(false);
         scheduleBirthdayDate();
         candleButton.classList.remove('isOut');
-        candleButton.setAttribute('aria-label', 'Blow out the birthday candle');
-        candleButton.querySelector('.candleAction').textContent = 'Tap the candle';
         cakeStatus.textContent = 'The candle is waiting for your wish ✨';
         wishReveal.classList.remove('isVisible');
         wishReveal.setAttribute('aria-hidden', 'true');
@@ -527,7 +524,7 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         });
     });
 
-    async function stopBlowDetection(message = 'Microphone is off. Tap the button to blow out the candle.') {
+    async function stopBlowDetection(message = 'Microphone is off. Enable it when you are ready to blow.') {
         if (blowAnimationFrame) cancelAnimationFrame(blowAnimationFrame);
         blowAnimationFrame = undefined;
         blowStartedAt = 0;
@@ -589,7 +586,7 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         if (volume > blowThreshold) {
             if (!blowStartedAt) blowStartedAt = timestamp;
             if (timestamp - blowStartedAt > 320) {
-                extinguishCandle('microphone');
+                extinguishCandle();
                 stopBlowDetection('Blow detected — microphone is now off. 🎉');
                 return;
             }
@@ -616,8 +613,8 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         } catch (error) {
             await stopBlowDetection(
                 error.name === 'NotAllowedError'
-                    ? 'Microphone permission was denied. You can still tap the candle.'
-                    : 'Microphone could not start. You can still tap the candle.'
+                    ? 'Microphone permission was denied. Allow microphone access to blow out the candle.'
+                    : 'Microphone could not start. Please check the browser microphone permission.'
             );
         } finally {
             micBlowButton.disabled = false;
@@ -633,36 +630,15 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         if (document.hidden && (blowStream || blowAudioContext)) stopBlowDetection();
     });
 
-    function extinguishCandle(source = 'tap') {
+    function extinguishCandle() {
         if (candleButton.classList.contains('isOut')) return;
         const candlePosition = candleButton.getBoundingClientRect();
         candleButton.classList.add('isOut');
-        candleButton.setAttribute('aria-label', 'Relight the birthday candle');
-        candleButton.querySelector('.candleAction').textContent = 'Wish made! Tap to relight';
-        cakeStatus.textContent = source === 'microphone'
-            ? 'You blew it out! Your wish is on its way, Afia! 🎉💖'
-            : 'Your wish is on its way, Afia! 🎉💖';
+        cakeStatus.textContent = 'You blew it out! Your wish is on its way, Afia! 🎉💖';
         wishReveal.classList.add('isVisible');
         wishReveal.setAttribute('aria-hidden', 'false');
         celebrate(`${candlePosition.left + candlePosition.width / 2}px`, `${candlePosition.top + 35}px`);
     }
-
-    function relightCandle() {
-        candleButton.classList.remove('isOut');
-        candleButton.setAttribute('aria-label', 'Blow out the birthday candle');
-        candleButton.querySelector('.candleAction').textContent = 'Tap the candle';
-        cakeStatus.textContent = 'The candle is glowing again ✨';
-        wishReveal.classList.remove('isVisible');
-        wishReveal.setAttribute('aria-hidden', 'true');
-    }
-
-    candleButton.addEventListener('click', () => {
-        if (candleButton.classList.contains('isOut')) relightCandle();
-        else {
-            extinguishCandle('tap');
-            if (blowStream || blowAudioContext) stopBlowDetection('Candle tapped — microphone is now off.');
-        }
-    });
 
     function createFloatingHeart(x, y) {
         const heart = document.createElement('span');

@@ -1949,17 +1949,11 @@ html[data-theme="blue"] {
     padding: 0 0 18px;
     border: 0;
     background: transparent;
-    cursor: pointer;
+    cursor: default;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-}
-
-.candleButton:focus-visible {
-    outline: 4px dashed var(--color-text-pink);
-    outline-offset: 8px;
-    border-radius: 24px;
 }
 
 .cake {
@@ -1970,10 +1964,6 @@ html[data-theme="blue"] {
     filter: drop-shadow(0 13px 0 rgba(51, 51, 51, .14));
     transform-origin: bottom center;
     transition: transform .25s ease;
-}
-
-.candleButton:hover .cake {
-    transform: translateY(-5px) rotate(-1deg);
 }
 
 .cakeLayer,
@@ -2170,23 +2160,6 @@ html[data-theme="blue"] {
     to { opacity: 0; transform: translate(15px, -34px) scale(1.8); }
 }
 
-.candleAction {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 9px 16px;
-    border: 2px solid var(--color-black);
-    border-radius: 999px;
-    background: white;
-    color: var(--color-black);
-    font: 700 .82rem "Poppins", sans-serif;
-    box-shadow: 0 4px 0 var(--color-black);
-}
-
-.candleButton.isOut .candleAction {
-    background: var(--color-text-pink);
-    color: white;
-}
-
 /* Hearts appear wherever the visitor taps the background. */
 .floatingTapHeart {
     position: fixed;
@@ -2309,9 +2282,6 @@ html[data-theme="blue"] {
         transform: scale(.88);
     }
 
-    .candleButton:hover .cake {
-        transform: scale(.88) translateY(-4px);
-    }
 }
 
 @media screen and (max-width: 380px) {
@@ -2333,9 +2303,6 @@ html[data-theme="blue"] {
         transform: scale(.78);
     }
 
-    .candleButton:hover .cake {
-        transform: scale(.78) translateY(-4px);
-    }
 }
 
 /* Surprise features live in focused popups, keeping the first page clean. */
@@ -2639,5 +2606,48 @@ html[data-theme="blue"] {
 
     .cakeSection.featureDialog .candleButton {
         min-height: 300px;
+    }
+}
+
+/* Lock the mobile hero to the live viewport so browser chrome cannot create a blank scroll area. */
+@media screen and (max-width: 700px) {
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
+    }
+
+    body {
+        position: fixed;
+        inset: 0;
+    }
+
+    #wrapper {
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
+        padding-bottom: 76px;
+        overflow: hidden;
+    }
+
+    .content {
+        height: calc(100dvh - 148px);
+        min-height: 0;
+        padding-top: clamp(12px, 2vh, 27px);
+        padding-bottom: 0;
+        gap: clamp(14px, 3vh, 28px);
+    }
+
+    .content .right .image {
+        width: min(230px, 62vw, 27vh);
+        height: min(230px, 62vw, 27vh);
+    }
+
+    .birthdayExtras {
+        height: 100vh;
+        height: 100dvh;
     }
 }
