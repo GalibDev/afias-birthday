@@ -1809,6 +1809,30 @@ html[data-theme="blue"] {
     font-weight: 700;
 }
 
+.micBlowButton {
+    min-height: 46px;
+    margin-top: 18px;
+    padding: 10px 16px;
+    border: 2px solid var(--color-black);
+    border-radius: 999px;
+    background: var(--color-black);
+    color: white;
+    font: 700 .82rem "Poppins", sans-serif;
+    box-shadow: 0 4px 0 var(--color-text-pink);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform .2s ease, background-color .2s ease;
+}
+
+.micBlowButton:hover,
+.micBlowButton:focus-visible,
+.micBlowButton[aria-pressed="true"] {
+    background: var(--color-text-pink);
+    transform: translateY(-2px);
+}
+
 .candleButton {
     position: relative;
     width: min(100%, 380px);
