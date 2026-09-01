@@ -527,6 +527,27 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         micStatus.textContent = message;
     }
 
+    async function requestBlowMicrophone() {
+        if (!navigator.mediaDevices?.getUserMedia) {
+            throw new Error('Microphone access is not supported in this browser.');
+        }
+        blowStream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+                echoCancellation: false,
+                noiseSuppression: false,
+                autoGainControl: false
+            }
+        });
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        blowAudioContext = new AudioContextClass();
+        await blowAudioContext.resume();
+        const microphoneSource = blowAudioContext.createMediaStreamSource(blowStream);
+        blowAnalyser = blowAudioContext.createAnalyser();
+        blowAnalyser.fftSize = 1024;
+        blowAnalyser.smoothingTimeConstant = .2;
+        microphoneSource.connect(blowAnalyser);
+    }
+
     candleButton.addEventListener('click', () => {
         const candleIsOut = candleButton.classList.toggle('isOut');
         if (candleIsOut) {
