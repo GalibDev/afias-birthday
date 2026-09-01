@@ -315,6 +315,8 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     let blowAnalyser;
     let blowAnimationFrame;
     let blowStartedAt = 0;
+    let blowBaseline = 0;
+    let blowCalibrationSamples = 0;
 
     function typeBirthdayDate() {
         clearInterval(dateTimer);
@@ -557,6 +559,30 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
             energy += normalizedSample * normalizedSample;
         });
         return Math.sqrt(energy / samples.length);
+    }
+
+    function monitorForBlow(timestamp) {
+        if (!blowAnalyser) return;
+        const volume = readMicrophoneVolume();
+        if (blowCalibrationSamples < 45) {
+            blowBaseline = ((blowBaseline * blowCalibrationSamples) + volume) / (blowCalibrationSamples + 1);
+            blowCalibrationSamples++;
+            blowAnimationFrame = requestAnimationFrame(monitorForBlow);
+            return;
+        }
+
+        const blowThreshold = Math.max(.045, blowBaseline * 3);
+        if (volume > blowThreshold) {
+            if (!blowStartedAt) blowStartedAt = timestamp;
+            if (timestamp - blowStartedAt > 320) {
+                extinguishCandle('microphone');
+                stopBlowDetection('Blow detected — microphone is now off. 🎉');
+                return;
+            }
+        } else {
+            blowStartedAt = 0;
+        }
+        blowAnimationFrame = requestAnimationFrame(monitorForBlow);
     }
 
     candleButton.addEventListener('click', () => {
