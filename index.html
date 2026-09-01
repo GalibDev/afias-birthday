@@ -313,6 +313,7 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     const cakeStatus = document.querySelector('.cakeStatus');
     const micBlowButton = document.querySelector('#micBlowButton');
     const micStatus = document.querySelector('.micStatus');
+    const wishReveal = document.querySelector('.wishReveal');
     const birthdayDate = '1 september';
     let dateTimer;
     let dateStartTimer;
@@ -401,6 +402,8 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         candleButton.setAttribute('aria-label', 'Blow out the birthday candle');
         candleButton.querySelector('.candleAction').textContent = 'Tap the candle';
         cakeStatus.textContent = 'The candle is waiting for your wish ✨';
+        wishReveal.classList.remove('isVisible');
+        wishReveal.setAttribute('aria-hidden', 'true');
         wrapper.classList.add('replayReset');
         void wrapper.offsetWidth;
         wrapper.classList.remove('replayReset');
@@ -639,6 +642,8 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         cakeStatus.textContent = source === 'microphone'
             ? 'You blew it out! Your wish is on its way, Afia! 🎉💖'
             : 'Your wish is on its way, Afia! 🎉💖';
+        wishReveal.classList.add('isVisible');
+        wishReveal.setAttribute('aria-hidden', 'false');
         celebrate(`${candlePosition.left + candlePosition.width / 2}px`, `${candlePosition.top + 35}px`);
     }
 
@@ -647,6 +652,8 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         candleButton.setAttribute('aria-label', 'Blow out the birthday candle');
         candleButton.querySelector('.candleAction').textContent = 'Tap the candle';
         cakeStatus.textContent = 'The candle is glowing again ✨';
+        wishReveal.classList.remove('isVisible');
+        wishReveal.setAttribute('aria-hidden', 'true');
     }
 
     candleButton.addEventListener('click', () => {
