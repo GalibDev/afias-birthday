@@ -2013,6 +2013,40 @@ html[data-theme="blue"] {
     animation: none;
 }
 
+.smokePuffs {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: -30px;
+    width: 60px;
+    height: 80px;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.smokePuffs i {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 15px;
+    height: 15px;
+    border: 3px solid rgba(85, 85, 85, .52);
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.smokePuffs i:nth-child(2) {
+    width: 21px;
+    height: 21px;
+}
+
+.smokePuffs i:nth-child(3) {
+    width: 27px;
+    height: 27px;
+}
+
 .candleButton.isOut .wick::after {
     content: "";
     position: absolute;
