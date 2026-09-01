@@ -1136,12 +1136,14 @@ body.modalOpen {
     visibility: hidden;
     transform: none;
     backdrop-filter: blur(5px);
+    pointer-events: none;
 }
 
 .boxMail.active {
     opacity: 1;
     visibility: visible;
     transform: none;
+    pointer-events: auto;
 }
 
 .boxMail .boxMail-container {

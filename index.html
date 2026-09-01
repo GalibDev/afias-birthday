@@ -355,6 +355,7 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     let blowStartedAt = 0;
     let blowBaseline = 0;
     let blowCalibrationSamples = 0;
+    let blowRequestPending = false;
 
     function typeBirthdayDate() {
         clearInterval(dateTimer);
@@ -626,28 +627,20 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         blowAnimationFrame = requestAnimationFrame(monitorForBlow);
     }
 
-    async function getMicrophonePermissionState() {
-        if (!navigator.permissions?.query) return 'unknown';
-        try {
-            const permission = await navigator.permissions.query({ name: 'microphone' });
-            return permission.state;
-        } catch {
-            return 'unknown';
-        }
-    }
-
     async function startBlowDetection() {
-        micStatus.textContent = 'Waiting for microphone permission...';
+        if (blowRequestPending || blowStream || blowAudioContext) return;
+        blowRequestPending = true;
+        micStatus.textContent = 'Opening microphone… allow access when your browser asks.';
         micPermissionHelp.hidden = true;
         micBlowButton.disabled = true;
+        micBlowButton.querySelector('span').textContent = 'Opening microphone…';
+        micBlowButton.querySelector('i').className = 'fa-solid fa-spinner fa-spin';
         try {
-            const permissionState = await getMicrophonePermissionState();
-            if (permissionState === 'denied') {
-                micPermissionHelp.hidden = false;
-                micStatus.textContent = 'Microphone was previously blocked. Allow it from browser/site settings, reload, then try again.';
+            await requestBlowMicrophone();
+            if (!cakeSection.classList.contains('isOpen')) {
+                await stopBlowDetection();
                 return;
             }
-            await requestBlowMicrophone();
             blowBaseline = 0;
             blowCalibrationSamples = 0;
             blowStartedAt = 0;
@@ -666,6 +659,7 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
                     : 'Microphone could not start. Please check the browser microphone permission.'
             );
         } finally {
+            blowRequestPending = false;
             micBlowButton.disabled = false;
         }
     }
@@ -673,10 +667,6 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     micBlowButton.addEventListener('click', () => {
         if (micBlowButton.getAttribute('aria-pressed') === 'true') stopBlowDetection();
         else startBlowDetection();
-    });
-
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden && (blowStream || blowAudioContext)) stopBlowDetection();
     });
 
     function extinguishCandle(source = 'blow') {
