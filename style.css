@@ -1230,6 +1230,38 @@ body.modalOpen {
     animation: none;
 }
 
+.letterMewmew {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: -24px auto -14px;
+    opacity: 0;
+    transform: translateY(-12px) scale(.72);
+    pointer-events: none;
+}
+
+.letterMewmew img {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    max-width: none;
+    height: 150px;
+    object-fit: contain;
+}
+
+.boxMail.opened .letterMewmew {
+    animation: letterMewmewReveal .7s .45s cubic-bezier(.2, .85, .25, 1.25) forwards;
+}
+
+@keyframes letterMewmewReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 .boxMail .boxMail-container .card2 h2,
 .boxMail .boxMail-container .card2:hover h2 {
     padding: 0;
