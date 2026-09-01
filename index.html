@@ -624,19 +624,31 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         if (document.hidden && (blowStream || blowAudioContext)) stopBlowDetection();
     });
 
-    candleButton.addEventListener('click', () => {
-        const candleIsOut = candleButton.classList.toggle('isOut');
-        if (candleIsOut) {
-            const candlePosition = candleButton.getBoundingClientRect();
-            candleButton.setAttribute('aria-label', 'Relight the birthday candle');
-            candleButton.querySelector('.candleAction').textContent = 'Wish made! Tap to relight';
-            cakeStatus.textContent = 'Your wish is on its way, Afia! 🎉💖';
-            celebrate(`${candlePosition.left + candlePosition.width / 2}px`, `${candlePosition.top + 35}px`);
-            return;
-        }
+    function extinguishCandle(source = 'tap') {
+        if (candleButton.classList.contains('isOut')) return;
+        const candlePosition = candleButton.getBoundingClientRect();
+        candleButton.classList.add('isOut');
+        candleButton.setAttribute('aria-label', 'Relight the birthday candle');
+        candleButton.querySelector('.candleAction').textContent = 'Wish made! Tap to relight';
+        cakeStatus.textContent = source === 'microphone'
+            ? 'You blew it out! Your wish is on its way, Afia! 🎉💖'
+            : 'Your wish is on its way, Afia! 🎉💖';
+        celebrate(`${candlePosition.left + candlePosition.width / 2}px`, `${candlePosition.top + 35}px`);
+    }
+
+    function relightCandle() {
+        candleButton.classList.remove('isOut');
         candleButton.setAttribute('aria-label', 'Blow out the birthday candle');
         candleButton.querySelector('.candleAction').textContent = 'Tap the candle';
         cakeStatus.textContent = 'The candle is glowing again ✨';
+    }
+
+    candleButton.addEventListener('click', () => {
+        if (candleButton.classList.contains('isOut')) relightCandle();
+        else {
+            extinguishCandle('tap');
+            if (blowStream || blowAudioContext) stopBlowDetection('Candle tapped — microphone is now off.');
+        }
     });
 
     function createFloatingHeart(x, y) {
