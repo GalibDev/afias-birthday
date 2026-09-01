@@ -14,8 +14,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Poppins:wght@400;600&display=swap"
         rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -100,6 +98,99 @@
                 </div>
             </div>
         </div>
+
+        <main class="birthdayExtras" aria-label="Birthday surprises">
+            <button class="featureBackdrop" type="button" aria-label="Close birthday surprise"></button>
+
+            <section class="themePanel extraCard" aria-labelledby="themeTitle" aria-hidden="true">
+                <div>
+                    <p class="eyebrow">Make it yours</p>
+                    <h2 id="themeTitle">Choose a birthday theme</h2>
+                </div>
+                <div class="themeSwitcher" role="group" aria-label="Color theme">
+                    <button class="themeButton isActive" type="button" data-theme="pink" aria-pressed="true">
+                        <span class="themeSwatch pinkSwatch" aria-hidden="true"></span>Pink
+                    </button>
+                    <button class="themeButton" type="button" data-theme="purple" aria-pressed="false">
+                        <span class="themeSwatch purpleSwatch" aria-hidden="true"></span>Purple
+                    </button>
+                    <button class="themeButton" type="button" data-theme="blue" aria-pressed="false">
+                        <span class="themeSwatch blueSwatch" aria-hidden="true"></span>Blue
+                    </button>
+                </div>
+            </section>
+
+            <section class="memorySection extraCard featureDialog" role="dialog" aria-modal="true" aria-labelledby="memoryTitle" aria-hidden="true">
+                <button class="featureClose" type="button" aria-label="Close memories">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+                <div class="sectionHeading">
+                    <div>
+                        <p class="eyebrow">A little trip down memory lane</p>
+                        <h2 id="memoryTitle">Our favorite memories</h2>
+                    </div>
+                    <div class="sliderControls">
+                        <button id="galleryPrev" type="button" aria-label="Previous memory">
+                            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                        </button>
+                        <button id="galleryNext" type="button" aria-label="Next memory">
+                            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="memorySlider" aria-roledescription="carousel">
+                    <div class="memoryTrack">
+                        <!-- Replace each dummy src below with your own photo path, for example: images/memory-1.jpg -->
+                        <article class="memorySlide isCurrent" aria-label="Memory 1 of 5">
+                            <img src="images/afia.jpeg" alt="Dummy memory placeholder 1">
+                            <div class="memoryCaption"><span>01</span><h3>The smile that brightens every day</h3><p>Replace this with your favorite memory caption.</p></div>
+                        </article>
+                        <article class="memorySlide" aria-label="Memory 2 of 5" aria-hidden="true">
+                            <img src="images/afia.jpeg" alt="Dummy memory placeholder 2">
+                            <div class="memoryCaption"><span>02</span><h3>One unforgettable moment</h3><p>Add the story behind your second photo here.</p></div>
+                        </article>
+                        <article class="memorySlide" aria-label="Memory 3 of 5" aria-hidden="true">
+                            <img src="images/afia.jpeg" alt="Dummy memory placeholder 3">
+                            <div class="memoryCaption"><span>03</span><h3>Laughs worth remembering</h3><p>Write a short funny memory in this caption.</p></div>
+                        </article>
+                        <article class="memorySlide" aria-label="Memory 4 of 5" aria-hidden="true">
+                            <img src="images/afia.jpeg" alt="Dummy memory placeholder 4">
+                            <div class="memoryCaption"><span>04</span><h3>A beautiful day together</h3><p>Replace this dummy photo and text from VS Code.</p></div>
+                        </article>
+                        <article class="memorySlide" aria-label="Memory 5 of 5" aria-hidden="true">
+                            <img src="images/afia.jpeg" alt="Dummy memory placeholder 5">
+                            <div class="memoryCaption"><span>05</span><h3>More memories to come</h3><p>The best chapters of life are still ahead.</p></div>
+                        </article>
+                    </div>
+                </div>
+                <div class="sliderDots" aria-label="Choose a memory"></div>
+            </section>
+
+            <section class="cakeSection extraCard featureDialog" role="dialog" aria-modal="true" aria-labelledby="cakeTitle" aria-hidden="true">
+                <button class="featureClose" type="button" aria-label="Close birthday cake">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+                <div class="cakeCopy">
+                    <p class="eyebrow">One last birthday wish</p>
+                    <h2 id="cakeTitle">Make a wish, Afia!</h2>
+                    <p>Tap the candle to blow it out. No microphone permission needed.</p>
+                    <p class="cakeStatus" aria-live="polite">The candle is waiting for your wish ✨</p>
+                </div>
+                <button class="candleButton" type="button" aria-label="Blow out the birthday candle">
+                    <span class="cake" aria-hidden="true">
+                        <span class="candle"><span class="flame"></span><span class="wick"></span></span>
+                        <span class="frosting frostingOne"></span>
+                        <span class="cakeLayer cakeLayerTop"></span>
+                        <span class="frosting frostingTwo"></span>
+                        <span class="cakeLayer cakeLayerBottom"></span>
+                        <span class="cakePlate"></span>
+                    </span>
+                    <span class="candleAction">Tap the candle</span>
+                </button>
+            </section>
+        </main>
+
         <div class="decorate_star star1" style="--t: 15s;"></div>
         <div class="decorate_star star2" style="--t: 15.2s;"></div>
         <div class="decorate_star star3" style="--t: 15.4s;"></div>
@@ -121,33 +212,57 @@
             <img src="./images/smiley_icon.png" alt="" width="100">
         </div>
 
+        <div class="pageControls" aria-label="Birthday controls">
+            <button class="controlButton" id="memoriesButton" type="button" title="Open memories" aria-expanded="false">
+                <i class="fa-solid fa-images" aria-hidden="true"></i>
+                <span>Memories</span>
+            </button>
+            <button class="controlButton" id="cakeButton" type="button" title="Make a wish" aria-expanded="false">
+                <i class="fa-solid fa-cake-candles" aria-hidden="true"></i>
+                <span>Cake</span>
+            </button>
+            <button class="controlButton" id="themeButton" type="button" title="Change theme" aria-expanded="false">
+                <i class="fa-solid fa-palette" aria-hidden="true"></i>
+                <span>Theme</span>
+            </button>
+            <button class="controlButton" id="musicToggle" type="button" aria-pressed="false" title="Play music">
+                <i class="fa-solid fa-volume-xmark" aria-hidden="true"></i>
+                <span>Music</span>
+            </button>
+            <button class="controlButton" id="replayButton" type="button" title="Replay animation">
+                <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+                <span>Replay</span>
+            </button>
+        </div>
 
-        <div class="boxMail">
-            <i class="fa-solid fa-xmark"></i>
-            <div class="boxMail-container">
+        <div id="celebrationLayer" aria-hidden="true"></div>
+
+        <div class="boxMail" role="dialog" aria-modal="true" aria-labelledby="letterTitle" aria-hidden="true">
+            <button class="closeMail" type="button" aria-label="Close birthday letter">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+            <div class="boxMail-container" role="document">
                 <div class="card1">
                     <div class="userImg">
-                        <img src="images/afia.jpeg" alt="">
+                        <img src="images/afia.jpeg" alt="Afia">
                     </div>
                     <h4 class="username">To: Afia 💖<span class="underline"></span></h4>
 
                     <h3>Happy Birthday</h3>
-                    <div class="imageCute">
-                        <img src="cute1.png" alt="">
-                    </div>
+                    <p class="openHint">Opening your letter...</p>
                 </div>
                 <div class="card2">
                     <div class="card2-content">
-                        <h3>To You!</h3>
+                        <h3 id="letterTitle">To You!</h3>
                         <h2>Happy Birthday, Afia! 🥳🎂🥳 From the day we became friends, I never imagined we'd create so many beautiful and unforgettable memories together, but little by little you became someone very special to me. ❤️
 
 Always remember, I'm here for you 🤗 whenever you need me. You can talk to me anytime, especially about the things you can't share with anyone else. I pray this year brings you happiness, success, peace, and takes you closer to becoming the Software Engineer you dream of. Happy Birthday! 🎈🎂🎈 Stay happy, keep smiling, and never stop believing in yourself. 😌
 
 
                         </h2>
-
-                        <div class="imageCute2">
-                            <img src="cute2.png" alt="">
+                        <div class="letterSignature">
+                            <span>With lots of good wishes 💖</span>
+                            <strong>— Galib</strong>
                         </div>
                     </div>
                 </div>
@@ -157,106 +272,312 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
 
 </body>
 <script>
-    let datetxt = "1 september";
-    let datatxtletter = "Afia, you are a really good friend, and I truly appreciate having you as a friend. On your special day, I wish you lots of happiness, good health, success, and many beautiful moments ahead. I hope you achieve all your dreams and have an amazing year. Happy Birthday! 💙🎂;"
+    const wrapper = document.querySelector('#wrapper');
+    const dateBox = document.querySelector('.date__of__birth');
+    const dateText = dateBox.querySelector('span');
+    const letterButton = document.querySelector('#btn__letter');
+    const boxMail = document.querySelector('.boxMail');
+    const closeMailButton = document.querySelector('.closeMail');
+    const celebrationLayer = document.querySelector('#celebrationLayer');
+    const musicToggle = document.querySelector('#musicToggle');
+    const replayButton = document.querySelector('#replayButton');
+    const birthdayExtras = document.querySelector('.birthdayExtras');
+    const featureBackdrop = document.querySelector('.featureBackdrop');
+    const memorySection = document.querySelector('.memorySection');
+    const cakeSection = document.querySelector('.cakeSection');
+    const themePanel = document.querySelector('.themePanel');
+    const memoriesButton = document.querySelector('#memoriesButton');
+    const cakeButton = document.querySelector('#cakeButton');
+    const themeButton = document.querySelector('#themeButton');
+    const memoryTrack = document.querySelector('.memoryTrack');
+    const memorySlides = [...document.querySelectorAll('.memorySlide')];
+    const sliderDots = document.querySelector('.sliderDots');
+    const galleryPrev = document.querySelector('#galleryPrev');
+    const galleryNext = document.querySelector('#galleryNext');
+    const candleButton = document.querySelector('.candleButton');
+    const cakeStatus = document.querySelector('.cakeStatus');
+    const birthdayDate = '1 september';
+    let dateTimer;
+    let dateStartTimer;
+    let letterOpenTimer;
+    let lastFocusedElement;
+    let featureLastFocus;
+    let openFeatureName = '';
 
-    let titleLetter = "To you";
-    let charArrDate = datetxt.split('');
-    let charArrDateLetter = datatxtletter.split('');
-    let charArrTitle = titleLetter.split('');
-    let currentIndex = 0;
-    let currentIndexLetter = 0;
-    let currentIndexTitle = 0;
-    let date__of__birth = document.querySelector(".date__of__birth span");
-    let text__letter = document.querySelector(".text__letter p");
-    setTimeout(function () {
-        timeDatetxt = setInterval(function () {
-            if (currentIndex < charArrDate.length) {
-                date__of__birth.textContent += charArrDate[currentIndex];
-                currentIndex++;
+    function typeBirthdayDate() {
+        clearInterval(dateTimer);
+        dateText.textContent = '';
+        dateBox.querySelectorAll('i').forEach(icon => icon.remove());
+        let index = 0;
+        dateTimer = setInterval(() => {
+            if (index < birthdayDate.length) {
+                dateText.textContent += birthdayDate[index++];
+                return;
             }
-            else {
-                let i = document.createElement("i");
-                i.className = "fa-solid fa-star"
-                document.querySelector(".date__of__birth").prepend(i)
-                document.querySelector(".date__of__birth").appendChild(i.cloneNode(true))
-                clearInterval(timeDatetxt)
-            }
-        }, 100)
-    }, 12000)
-
-    var intervalContent;
-    var intervalTitle;
-    $("#btn__letter").on("click", function () {
-        $(".box__letter").slideDown()
-        setTimeout(function () {
-            $(".letter__border").slideDown();
-        }, 1000)
-        setTimeout(function () {
-            intervalTitle = setInterval(function () {
-                if (currentIndexTitle < charArrTitle.length) {
-                    document.querySelector(".title__letter").textContent += charArrTitle[currentIndexTitle];
-                    let i = document.createElement("i");
-                    i.className = "fa-solid fa-heart"
-                    document.querySelector(".title__letter").appendChild(i)
-                    currentIndexTitle++;
-                }
-                else {
-                    clearInterval(intervalTitle)
-                }
-            }, 100)
-        }, 2000)
-        setTimeout(function () {
-            document.querySelector("#heart__letter").classList.add("animationOp");
-            document.querySelector(".love__img").classList.add("animationOp");
-            document.querySelector("#mewmew").classList.add("animationOp");
-        }, 2800)
-        setTimeout(function () {
-            document.querySelectorAll(".heart").forEach((item) => {
-                item.classList.add("animation")
-            })
-        }, 3500)
-        setTimeout(function () {
-            intervalContent = setInterval(function () {
-                if (currentIndexLetter < charArrDateLetter.length) {
-                    text__letter.textContent += charArrDateLetter[currentIndexLetter];
-                    currentIndexLetter++;
-                }
-                else {
-                    clearInterval(intervalContent)
-                }
-            }, 50)
-        }, 6000)
-    })
-    $(".close").on("click", function () {
-        clearInterval(intervalContent)
-        document.querySelector(".title__letter").textContent = "";
-        text__letter.textContent = "";
-        currentIndexLetter = 0
-        currentIndexTitle = 0
-        document.querySelector("#heart__letter").classList.remove("animationOp");
-        document.querySelector(".love__img").classList.remove("animationOp");
-        document.querySelector("#mewmew").classList.remove("animationOp");
-        document.querySelectorAll(".heart").forEach((item) => {
-            item.classList.remove("animation")
-        })
-        $(".box__letter").slideUp();
-        $(".letter__border").slideUp();
-    })
-
-
-
-    let mailBox = document.querySelector('.mail')
-    let boxmail = document.querySelector('.boxMail')
-    var close = document.querySelector('.fa-xmark')
-    mailBox.onclick = function () {
-        mailBox.classList.toggle('active')
-        boxmail.classList.add('active')
+            clearInterval(dateTimer);
+            const star = document.createElement('i');
+            star.className = 'fa-solid fa-star';
+            dateBox.prepend(star);
+            dateBox.append(star.cloneNode(true));
+        }, 90);
     }
 
-    close.addEventListener('click', function () {
-        boxmail.classList.remove('active')
-    })
+    function scheduleBirthdayDate() {
+        clearInterval(dateTimer);
+        clearTimeout(dateStartTimer);
+        dateText.textContent = '';
+        dateStartTimer = window.setTimeout(typeBirthdayDate, 2900);
+    }
+
+    function celebrate(originX = '50vw', originY = '58vh') {
+        const colors = ['#ff7882', '#ffd166', '#ffffff', '#ff9aa2', '#9bf6ff'];
+        celebrationLayer.replaceChildren();
+        celebrationLayer.style.setProperty('--burst-x', originX);
+        celebrationLayer.style.setProperty('--burst-y', originY);
+        for (let index = 0; index < 60; index++) {
+            const particle = document.createElement('span');
+            const isHeart = index % 5 === 0;
+            particle.className = `celebrationParticle${isHeart ? ' heartParticle' : ''}`;
+            particle.textContent = isHeart ? '♥' : '';
+            particle.style.setProperty('--x', `${(Math.random() - .5) * 110}vw`);
+            particle.style.setProperty('--y', `${-20 - Math.random() * 75}vh`);
+            particle.style.setProperty('--r', `${Math.random() * 720 - 360}deg`);
+            particle.style.setProperty('--delay', `${Math.random() * .25}s`);
+            particle.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
+            celebrationLayer.appendChild(particle);
+        }
+        window.setTimeout(() => celebrationLayer.replaceChildren(), 2400);
+    }
+
+    function openLetter() {
+        closeFeatures(false);
+        lastFocusedElement = document.activeElement;
+        clearTimeout(letterOpenTimer);
+        boxMail.classList.add('active');
+        boxMail.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modalOpen');
+        celebrate();
+        letterOpenTimer = window.setTimeout(() => boxMail.classList.add('opened'), 450);
+        window.setTimeout(() => closeMailButton.focus(), 520);
+    }
+
+    function closeLetter() {
+        clearTimeout(letterOpenTimer);
+        boxMail.classList.remove('active', 'opened');
+        boxMail.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modalOpen');
+        if (lastFocusedElement) lastFocusedElement.focus();
+    }
+
+    function replayAnimation() {
+        closeLetter();
+        closeFeatures(false);
+        scheduleBirthdayDate();
+        candleButton.classList.remove('isOut');
+        candleButton.setAttribute('aria-label', 'Blow out the birthday candle');
+        candleButton.querySelector('.candleAction').textContent = 'Tap the candle';
+        cakeStatus.textContent = 'The candle is waiting for your wish ✨';
+        wrapper.classList.add('replayReset');
+        void wrapper.offsetWidth;
+        wrapper.classList.remove('replayReset');
+        celebrate();
+    }
+
+    letterButton.addEventListener('click', openLetter);
+    closeMailButton.addEventListener('click', closeLetter);
+    boxMail.addEventListener('click', event => {
+        if (event.target === boxMail) closeLetter();
+    });
+
+    const featurePanels = {
+        memories: memorySection,
+        cake: cakeSection,
+        theme: themePanel
+    };
+    const featureButtons = {
+        memories: memoriesButton,
+        cake: cakeButton,
+        theme: themeButton
+    };
+
+    function closeFeatures(restoreFocus = true) {
+        Object.values(featurePanels).forEach(panel => {
+            panel.classList.remove('isOpen');
+            panel.setAttribute('aria-hidden', 'true');
+        });
+        Object.values(featureButtons).forEach(button => button.setAttribute('aria-expanded', 'false'));
+        birthdayExtras.classList.remove('hasModal', 'hasPopover');
+        if (!boxMail.classList.contains('active')) document.body.classList.remove('modalOpen');
+        openFeatureName = '';
+        if (restoreFocus && featureLastFocus) featureLastFocus.focus();
+    }
+
+    function openFeature(name) {
+        const shouldClose = openFeatureName === name;
+        closeFeatures(false);
+        if (shouldClose) return;
+        const panel = featurePanels[name];
+        const opener = featureButtons[name];
+        featureLastFocus = opener;
+        openFeatureName = name;
+        panel.classList.add('isOpen');
+        panel.setAttribute('aria-hidden', 'false');
+        opener.setAttribute('aria-expanded', 'true');
+        birthdayExtras.classList.add(name === 'theme' ? 'hasPopover' : 'hasModal');
+        if (name !== 'theme') {
+            document.body.classList.add('modalOpen');
+            window.setTimeout(() => panel.querySelector('.featureClose').focus(), 250);
+        }
+    }
+
+    memoriesButton.addEventListener('click', () => openFeature('memories'));
+    cakeButton.addEventListener('click', () => openFeature('cake'));
+    themeButton.addEventListener('click', () => openFeature('theme'));
+    featureBackdrop.addEventListener('click', () => closeFeatures());
+    document.querySelectorAll('.featureClose').forEach(button => {
+        button.addEventListener('click', () => closeFeatures());
+    });
+
+    replayButton.addEventListener('click', replayAnimation);
+    document.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        if (boxMail.classList.contains('active')) closeLetter();
+        else if (openFeatureName) closeFeatures();
+    });
+    document.addEventListener('pointerdown', event => {
+        if (openFeatureName !== 'theme') return;
+        if (!event.target.closest('.themePanel, #themeButton')) closeFeatures(false);
+    });
+
+    let currentSlide = 0;
+
+    function showSlide(nextIndex) {
+        currentSlide = (nextIndex + memorySlides.length) % memorySlides.length;
+        memoryTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+        memorySlides.forEach((slide, index) => {
+            const isCurrent = index === currentSlide;
+            slide.classList.toggle('isCurrent', isCurrent);
+            slide.setAttribute('aria-hidden', String(!isCurrent));
+        });
+        [...sliderDots.children].forEach((dot, index) => {
+            dot.classList.toggle('isActive', index === currentSlide);
+            dot.setAttribute('aria-pressed', String(index === currentSlide));
+        });
+    }
+
+    memorySlides.forEach((slide, index) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.setAttribute('aria-label', `Show memory ${index + 1}`);
+        dot.setAttribute('aria-pressed', String(index === 0));
+        if (index === 0) dot.classList.add('isActive');
+        dot.addEventListener('click', () => showSlide(index));
+        sliderDots.appendChild(dot);
+    });
+
+    galleryPrev.addEventListener('click', () => showSlide(currentSlide - 1));
+    galleryNext.addEventListener('click', () => showSlide(currentSlide + 1));
+
+    let swipeStartX = 0;
+    memoryTrack.addEventListener('pointerdown', event => {
+        swipeStartX = event.clientX;
+    });
+    memoryTrack.addEventListener('pointerup', event => {
+        const distance = event.clientX - swipeStartX;
+        if (Math.abs(distance) > 45) showSlide(currentSlide + (distance < 0 ? 1 : -1));
+    });
+
+    document.querySelectorAll('.themeButton').forEach(button => {
+        button.addEventListener('click', () => {
+            const selectedTheme = button.dataset.theme;
+            document.documentElement.dataset.theme = selectedTheme;
+            document.querySelectorAll('.themeButton').forEach(themeButton => {
+                const isSelected = themeButton === button;
+                themeButton.classList.toggle('isActive', isSelected);
+                themeButton.setAttribute('aria-pressed', String(isSelected));
+            });
+        });
+    });
+
+    candleButton.addEventListener('click', () => {
+        const candleIsOut = candleButton.classList.toggle('isOut');
+        if (candleIsOut) {
+            const candlePosition = candleButton.getBoundingClientRect();
+            candleButton.setAttribute('aria-label', 'Relight the birthday candle');
+            candleButton.querySelector('.candleAction').textContent = 'Wish made! Tap to relight';
+            cakeStatus.textContent = 'Your wish is on its way, Afia! 🎉💖';
+            celebrate(`${candlePosition.left + candlePosition.width / 2}px`, `${candlePosition.top + 35}px`);
+            return;
+        }
+        candleButton.setAttribute('aria-label', 'Blow out the birthday candle');
+        candleButton.querySelector('.candleAction').textContent = 'Tap the candle';
+        cakeStatus.textContent = 'The candle is glowing again ✨';
+    });
+
+    function createFloatingHeart(x, y) {
+        const heart = document.createElement('span');
+        heart.className = 'floatingTapHeart';
+        heart.textContent = Math.random() > .35 ? '♥' : '♡';
+        heart.style.left = `${x}px`;
+        heart.style.top = `${y}px`;
+        heart.style.setProperty('--drift', `${(Math.random() - .5) * 90}px`);
+        heart.style.setProperty('--heart-size', `${16 + Math.random() * 20}px`);
+        document.body.appendChild(heart);
+        window.setTimeout(() => heart.remove(), 1500);
+    }
+
+    document.addEventListener('pointerdown', event => {
+        if (!event.isPrimary || event.target.closest('button, a, .boxMail, .birthdayExtras')) return;
+        createFloatingHeart(event.clientX, event.clientY);
+    });
+
+    let audioContext;
+    let melodyTimer;
+    let noteIndex = 0;
+    const melody = [523.25, 659.25, 783.99, 659.25, 698.46, 880, 783.99, 659.25];
+
+    function playNote() {
+        if (!audioContext) return;
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        const now = audioContext.currentTime;
+        oscillator.type = 'sine';
+        oscillator.frequency.value = melody[noteIndex++ % melody.length];
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.08, now + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
+        oscillator.connect(gain).connect(audioContext.destination);
+        oscillator.start(now);
+        oscillator.stop(now + 0.4);
+    }
+
+    async function toggleMusic() {
+        const isPlaying = musicToggle.getAttribute('aria-pressed') === 'true';
+        if (isPlaying) {
+            clearInterval(melodyTimer);
+            melodyTimer = undefined;
+            if (audioContext) await audioContext.close();
+            audioContext = undefined;
+            musicToggle.setAttribute('aria-pressed', 'false');
+            musicToggle.title = 'Play music';
+            musicToggle.querySelector('i').className = 'fa-solid fa-volume-xmark';
+            return;
+        }
+
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        audioContext = new AudioContextClass();
+        await audioContext.resume();
+        noteIndex = 0;
+        playNote();
+        melodyTimer = window.setInterval(playNote, 430);
+        musicToggle.setAttribute('aria-pressed', 'true');
+        musicToggle.title = 'Stop music';
+        musicToggle.querySelector('i').className = 'fa-solid fa-volume-high';
+    }
+
+    musicToggle.addEventListener('click', toggleMusic);
+    scheduleBirthdayDate();
 </script>
 
 </html>

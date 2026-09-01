@@ -16,23 +16,27 @@
     --color-border: #DACCBF;
 }
 html{
-    height: 100%;
+    min-height: 100%;
 }
 body {
     position: relative;
     font-size: 16px;
     margin: 0;
     padding: 0;
-    height: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
     background-image:linear-gradient(var(--color-pink), var(--color-pink));
 }
 #wrapper{
     position: relative;
     background-color: transparent;
     background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 1) 25%, rgba(255, 255, 255, 1) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 1) 75%, rgba(255, 255, 255, 1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 1) 25%, rgba(255, 255, 255,1) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 1) 75%, rgba(255, 255, 255, 1) 76%, transparent 77%, transparent);
-    height:100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    height: auto;
     background-size:80px 80px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     z-index: 1;
 }
 .flag__birthday{
@@ -1030,4 +1034,1418 @@ body {
     cursor: pointer;
     color: white;
     z-index: 10000000000000000;
+}
+
+/* Responsive polish and interactive controls */
+body.modalOpen {
+    overflow: hidden;
+}
+
+#wrapper.replayReset *,
+#wrapper.replayReset *::before,
+#wrapper.replayReset *::after {
+    animation: none !important;
+}
+
+.pageControls {
+    position: fixed;
+    left: max(14px, env(safe-area-inset-left));
+    bottom: max(14px, env(safe-area-inset-bottom));
+    z-index: 50;
+    display: flex;
+    gap: 10px;
+}
+
+.controlButton {
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 3px solid var(--color-black);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .92);
+    color: var(--color-black);
+    font: 600 .85rem "Poppins", sans-serif;
+    box-shadow: 0 4px 0 var(--color-black);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: transform .2s ease, background-color .2s ease;
+}
+
+.controlButton:hover,
+.controlButton:focus-visible,
+.controlButton[aria-pressed="true"] {
+    background: var(--color-text-pink);
+    color: white;
+}
+
+.controlButton:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--color-black);
+}
+
+#celebrationLayer {
+    position: fixed;
+    inset: 0;
+    z-index: 100000010;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.celebrationParticle {
+    position: absolute;
+    left: 50%;
+    top: 58%;
+    width: 10px;
+    height: 18px;
+    border-radius: 2px;
+    background: var(--color);
+    color: var(--color);
+    animation: celebrationBurst 1.9s var(--delay) cubic-bezier(.15, .65, .3, 1) forwards;
+}
+
+.celebrationParticle.heartParticle {
+    width: auto;
+    height: auto;
+    background: transparent;
+    font-size: clamp(16px, 3vw, 28px);
+    line-height: 1;
+}
+
+@keyframes celebrationBurst {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(.2) rotate(0deg);
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--x)), var(--y)) scale(1) rotate(var(--r));
+    }
+}
+
+/* The letter is click-driven so it works on touchscreens too. */
+.boxMail {
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
+    padding: clamp(18px, 4vw, 42px);
+    opacity: 0;
+    visibility: hidden;
+    transform: none;
+    backdrop-filter: blur(5px);
+}
+
+.boxMail.active {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+
+.boxMail .boxMail-container {
+    position: relative;
+    width: min(720px, 92vw);
+    height: min(500px, 78svh);
+    min-height: 360px;
+    margin: 0;
+    transform: none;
+    perspective: 1600px;
+    filter: drop-shadow(0 16px 25px rgba(0, 0, 0, .3));
+}
+
+.boxMail .boxMail-container:hover {
+    transform: none;
+    filter: drop-shadow(0 16px 25px rgba(0, 0, 0, .3));
+}
+
+.boxMail .boxMail-container .card1,
+.boxMail .boxMail-container .card2 {
+    position: absolute;
+    inset: 0;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: 100%;
+    border: 3px solid var(--color-black);
+    border-radius: 24px;
+    transform: none;
+    overflow: hidden;
+}
+
+.boxMail .boxMail-container .card2 {
+    background: var(--color-bg-letter);
+}
+
+.boxMail .boxMail-container .card1 {
+    z-index: 2;
+    background: linear-gradient(135deg, #ff7882, #ff9aa2);
+    transform-origin: left center;
+    opacity: 1;
+    transition: transform .9s cubic-bezier(.2, .8, .2, 1), opacity .7s ease;
+}
+
+.boxMail .boxMail-container:hover .card1 {
+    transform: none;
+}
+
+.boxMail.opened .boxMail-container .card1 {
+    transform: translateX(-105%) rotateY(-35deg);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.boxMail .boxMail-container .card1 h3 {
+    font-size: clamp(2rem, 7vw, 3.6rem);
+    letter-spacing: clamp(2px, 1vw, 6px);
+}
+
+.openHint {
+    margin-top: 18px;
+    font: 600 .85rem "Poppins", sans-serif;
+    opacity: .85;
+}
+
+.boxMail .boxMail-container .card2 .card2-content {
+    height: 100%;
+    padding: clamp(24px, 5vw, 48px);
+    background: linear-gradient(145deg, #fff8e4 0%, #fff 100%);
+    color: #3e3030;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-color: var(--color-text-pink) transparent;
+}
+
+.boxMail .boxMail-container .card2 h3,
+.boxMail .boxMail-container .card2:hover h3 {
+    padding: 0;
+    margin-bottom: 16px;
+    opacity: 1;
+    visibility: visible;
+    color: var(--color-text-pink);
+    font-size: clamp(2rem, 6vw, 3rem);
+    text-align: center;
+    text-shadow: none;
+    animation: none;
+}
+
+.boxMail .boxMail-container .card2 h2,
+.boxMail .boxMail-container .card2:hover h2 {
+    padding: 0;
+    text-indent: 0;
+    opacity: 1;
+    color: #4b3a3a;
+    font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+    line-height: 1.55;
+    text-align: left;
+    animation: none;
+}
+
+.boxMail .boxMail-container:hover .card2-content {
+    transform: none;
+    box-shadow: none;
+}
+
+.letterSignature {
+    margin-top: 22px;
+    color: var(--color-text-pink);
+    font: 700 clamp(1.2rem, 4vw, 1.6rem) "Dancing Script", cursive;
+    text-align: right;
+}
+
+.closeMail {
+    position: fixed;
+    top: max(14px, env(safe-area-inset-top));
+    right: max(14px, env(safe-area-inset-right));
+    z-index: 100000020;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 2px solid rgba(255,255,255,.7);
+    border-radius: 50%;
+    background: rgba(0,0,0,.35);
+    color: white;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+}
+
+.boxMail .closeMail .fa-xmark {
+    position: static;
+    padding: 0;
+    font-size: 25px;
+    color: inherit;
+}
+
+.closeMail:hover,
+.closeMail:focus-visible {
+    background: var(--color-text-pink);
+    outline: 3px solid white;
+}
+
+/* Faster reveal: visitors see the whole greeting in a few seconds. */
+.title .happy span,
+.title .birthday span {
+    animation-delay: .65s;
+}
+
+.title .hat {
+    animation: topHat 1.7s 1s forwards ease;
+}
+
+.date__of__birth {
+    animation: dateOfBirth 1.4s 1.7s forwards;
+}
+
+.right .box__account {
+    animation: topBoxImage 1.5s .8s forwards ease-out;
+}
+
+.left .btn {
+    animation: scaleCricle 1.2s 2.6s forwards ease-in-out;
+}
+
+.cricle,
+.decorate_star,
+.decorate_flower--one,
+.decorate_flower--two,
+.decorate_flower--three,
+.smiley__icon {
+    animation-delay: 2.8s;
+}
+
+@media screen and (max-width: 700px) {
+    #wrapper {
+        min-height: 100svh;
+        padding-bottom: 82px;
+    }
+
+    .flag__birthday {
+        height: 72px;
+    }
+
+    .flag__birthday img {
+        width: 280px;
+        max-width: none;
+    }
+
+    .content {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+        padding: 1.7rem 16px 2rem;
+    }
+
+    .content .left,
+    .content .right {
+        width: 100%;
+    }
+
+    .title {
+        width: 100%;
+        max-width: 420px;
+        font-size: clamp(1.35rem, 7vw, 1.8rem);
+        letter-spacing: clamp(1px, 1.5vw, 6px);
+    }
+
+    .title .happy,
+    .title .birthday {
+        text-shadow: 3px 3px var(--color-black), -3px 3px var(--color-black), 3px -3px var(--color-black), -3px -3px var(--color-black), 3px 6px 0 var(--color-black);
+    }
+
+    .title .hat {
+        right: 3%;
+        width: 82px;
+        z-index: 0;
+    }
+
+    .title .hat img {
+        width: 82px;
+    }
+
+    .date__of__birth {
+        max-width: calc(100vw - 40px);
+    }
+
+    .date__of__birth span {
+        margin: 0 18px;
+    }
+
+    #btn__letter {
+        width: min(230px, calc(100vw - 60px));
+        min-height: 44px;
+    }
+
+    .content .right .image {
+        width: min(230px, 62vw);
+        height: min(230px, 62vw);
+    }
+
+    .content .right .image img {
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .right .balloon_two {
+        right: -45px;
+    }
+
+    .cricle {
+        top: 4px;
+        right: calc(50% - 150px);
+        transform-origin: center;
+    }
+
+    .pageControls {
+        left: 50%;
+        transform: translateX(-50%);
+        width: max-content;
+    }
+
+    .boxMail {
+        padding: 68px 16px 20px;
+        align-items: center;
+    }
+
+    .boxMail .boxMail-container {
+        width: 100%;
+        height: min(620px, calc(100svh - 100px));
+        min-height: 320px;
+    }
+
+    .boxMail .boxMail-container .card1,
+    .boxMail .boxMail-container .card2 {
+        border-radius: 18px;
+    }
+
+    .boxMail .boxMail-container .card2 .card2-content {
+        padding: 24px 20px 32px;
+    }
+
+    .boxMail .boxMail-container .card2 h2,
+    .boxMail .boxMail-container .card2:hover h2 {
+        font-size: clamp(.98rem, 4.2vw, 1.15rem);
+        line-height: 1.5;
+    }
+}
+
+@media screen and (orientation: landscape) and (max-height: 520px) and (max-width: 950px) {
+    #wrapper {
+        min-height: 100svh;
+        padding-bottom: 64px;
+    }
+
+    .flag__birthday {
+        height: 42px;
+    }
+
+    .flag__birthday img {
+        width: 250px;
+    }
+
+    .content {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        padding: 0 36px 18px;
+    }
+
+    .content .left,
+    .content .right {
+        width: 50%;
+    }
+
+    .title {
+        font-size: clamp(1.15rem, 3.2vw, 1.65rem);
+        letter-spacing: 3px;
+    }
+
+    .title .hat,
+    .decorate_bottom,
+    .smiley__icon {
+        display: none;
+    }
+
+    .date__of__birth {
+        margin-top: 12px;
+        transform: none;
+    }
+
+    #btn__letter {
+        margin-top: 10px;
+    }
+
+    .content .right .image {
+        width: min(210px, 30vw);
+        height: min(210px, 30vw);
+    }
+
+    .content .right .image img {
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .right .balloon_one,
+    .right .balloon_two {
+        transform: scale(.75);
+    }
+
+    .cricle {
+        right: 5%;
+        top: 0;
+        transform: scale(.8);
+    }
+
+    .pageControls {
+        bottom: 8px;
+    }
+
+    .controlButton {
+        min-height: 38px;
+        padding: 6px 11px;
+    }
+
+    .boxMail {
+        padding: 56px 70px 14px;
+    }
+
+    .boxMail .boxMail-container {
+        width: min(650px, 84vw);
+        height: calc(100svh - 72px);
+        min-height: 250px;
+    }
+
+    .boxMail .boxMail-container .card2 .card2-content {
+        padding: 18px 26px;
+    }
+
+    .boxMail .boxMail-container .card2 h3,
+    .boxMail .boxMail-container .card2:hover h3 {
+        margin-bottom: 8px;
+        font-size: 1.8rem;
+    }
+
+    .boxMail .boxMail-container .card2 h2,
+    .boxMail .boxMail-container .card2:hover h2 {
+        font-size: .92rem;
+        line-height: 1.35;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-delay: 0s !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
+}
+
+/* Theme switcher */
+html[data-theme="purple"] {
+    --color-pink: #efe7ff;
+    --color-text-pink: #9b6cdb;
+    --color-heart: #9b6cdb;
+    --color-bg-letter: #faf6ff;
+    --color-border: #d9c8ef;
+}
+
+html[data-theme="blue"] {
+    --color-pink: #e5f5ff;
+    --color-text-pink: #54a8d8;
+    --color-heart: #438fc1;
+    --color-bg-letter: #f1faff;
+    --color-border: #bdddea;
+}
+
+.birthdayExtras {
+    position: relative;
+    z-index: 4;
+    width: min(1100px, calc(100% - 36px));
+    margin: 46px auto 0;
+    padding-bottom: 110px;
+    display: grid;
+    gap: 28px;
+    font-family: "Poppins", sans-serif;
+}
+
+.extraCard {
+    border: 3px solid var(--color-black);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, .86);
+    box-shadow: 8px 8px 0 var(--color-black);
+    overflow: hidden;
+}
+
+.extraCard h2 {
+    margin: 0;
+    color: var(--color-black);
+    font: 700 clamp(1.7rem, 4vw, 2.6rem) "Dancing Script", cursive;
+}
+
+.eyebrow {
+    margin-bottom: 4px;
+    color: var(--color-text-pink);
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.themePanel {
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.themeSwitcher {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 9px;
+}
+
+.themeButton {
+    min-height: 44px;
+    padding: 8px 14px 8px 9px;
+    border: 2px solid var(--color-black);
+    border-radius: 999px;
+    background: white;
+    color: var(--color-black);
+    font: 600 .82rem "Poppins", sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.themeButton:hover,
+.themeButton:focus-visible,
+.themeButton.isActive {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 var(--color-black);
+}
+
+.themeSwatch {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--color-black);
+    border-radius: 50%;
+}
+
+.pinkSwatch { background: #ff7882; }
+.purpleSwatch { background: #9b6cdb; }
+.blueSwatch { background: #54a8d8; }
+
+/* Memory gallery */
+.memorySection {
+    padding: clamp(20px, 4vw, 38px);
+}
+
+.sectionHeading {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 18px;
+}
+
+.sliderControls {
+    display: flex;
+    gap: 9px;
+}
+
+.sliderControls button {
+    width: 46px;
+    height: 46px;
+    border: 2px solid var(--color-black);
+    border-radius: 50%;
+    background: var(--color-text-pink);
+    color: white;
+    cursor: pointer;
+    transition: transform .2s ease, background-color .2s ease;
+}
+
+.sliderControls button:hover,
+.sliderControls button:focus-visible {
+    transform: scale(1.08);
+    background: var(--color-black);
+}
+
+.memorySlider {
+    border: 3px solid var(--color-black);
+    border-radius: 22px;
+    overflow: hidden;
+    background: var(--color-pink);
+    touch-action: pan-y;
+}
+
+.memoryTrack {
+    display: flex;
+    transition: transform .65s cubic-bezier(.2, .8, .2, 1);
+}
+
+.memorySlide {
+    position: relative;
+    min-width: 100%;
+    height: clamp(330px, 55vw, 520px);
+    overflow: hidden;
+    user-select: none;
+}
+
+.memorySlide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    display: block;
+    transform: scale(1.04);
+    filter: saturate(.9) contrast(.96);
+    transition: transform 1.2s ease;
+    pointer-events: none;
+}
+
+.memorySlide:nth-child(2) img { object-position: 35% 25%; filter: sepia(.12) saturate(.85); }
+.memorySlide:nth-child(3) img { object-position: 65% 35%; filter: saturate(.75) contrast(1.05); }
+.memorySlide:nth-child(4) img { object-position: center 52%; filter: sepia(.18) saturate(1.1); }
+.memorySlide:nth-child(5) img { object-position: 45% 18%; filter: saturate(1.15) brightness(1.03); }
+
+.memorySlide.isCurrent img {
+    transform: scale(1);
+}
+
+.memorySlide::after {
+    content: "";
+    position: absolute;
+    inset: 42% 0 0;
+    background: linear-gradient(transparent, rgba(25, 18, 18, .86));
+    pointer-events: none;
+}
+
+.memoryCaption {
+    position: absolute;
+    z-index: 2;
+    left: clamp(18px, 5vw, 50px);
+    right: clamp(18px, 5vw, 50px);
+    bottom: clamp(18px, 4vw, 40px);
+    color: white;
+}
+
+.memoryCaption span {
+    display: inline-grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    margin-bottom: 10px;
+    border: 2px solid white;
+    border-radius: 50%;
+    font-weight: 700;
+}
+
+.memoryCaption h3 {
+    margin: 0 0 5px;
+    font: 700 clamp(1.7rem, 5vw, 3rem) "Dancing Script", cursive;
+}
+
+.memoryCaption p {
+    max-width: 620px;
+    font-size: clamp(.82rem, 2vw, 1rem);
+    line-height: 1.5;
+}
+
+.sliderDots {
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.sliderDots button {
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border: 2px solid var(--color-black);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    transition: width .25s ease, background-color .25s ease;
+}
+
+.sliderDots button.isActive {
+    width: 34px;
+    background: var(--color-text-pink);
+}
+
+/* Virtual cake */
+.cakeSection {
+    min-height: 440px;
+    padding: clamp(28px, 5vw, 58px);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, .9fr);
+    align-items: center;
+    gap: 34px;
+    background: linear-gradient(135deg, rgba(255,255,255,.96), var(--color-pink));
+}
+
+.cakeCopy > p:not(.eyebrow):not(.cakeStatus) {
+    max-width: 520px;
+    margin-top: 12px;
+    color: #655;
+    line-height: 1.7;
+}
+
+.cakeStatus {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: white;
+    color: var(--color-text-pink);
+    font-weight: 700;
+}
+
+.candleButton {
+    position: relative;
+    width: min(100%, 380px);
+    min-height: 330px;
+    margin: 0 auto;
+    padding: 0 0 18px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.candleButton:focus-visible {
+    outline: 4px dashed var(--color-text-pink);
+    outline-offset: 8px;
+    border-radius: 24px;
+}
+
+.cake {
+    position: relative;
+    display: block;
+    width: 300px;
+    height: 275px;
+    filter: drop-shadow(0 13px 0 rgba(51, 51, 51, .14));
+    transform-origin: bottom center;
+    transition: transform .25s ease;
+}
+
+.candleButton:hover .cake {
+    transform: translateY(-5px) rotate(-1deg);
+}
+
+.cakeLayer,
+.frosting,
+.cakePlate,
+.candle {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cakeLayer {
+    border: 4px solid var(--color-black);
+    background: repeating-linear-gradient(90deg, #f4b183 0 18px, #ffd2aa 18px 36px);
+}
+
+.cakeLayerTop {
+    bottom: 100px;
+    width: 205px;
+    height: 73px;
+    border-radius: 14px 14px 8px 8px;
+}
+
+.cakeLayerBottom {
+    bottom: 22px;
+    width: 275px;
+    height: 92px;
+    border-radius: 15px 15px 12px 12px;
+}
+
+.frosting {
+    z-index: 3;
+    height: 29px;
+    border: 4px solid var(--color-black);
+    border-radius: 50%;
+    background: var(--color-text-pink);
+}
+
+.frosting::after {
+    content: "";
+    position: absolute;
+    left: 17%;
+    top: 15px;
+    width: 24px;
+    height: 25px;
+    border: 3px solid var(--color-black);
+    border-top: 0;
+    border-radius: 0 0 14px 14px;
+    background: var(--color-text-pink);
+    box-shadow: 55px 7px 0 -2px var(--color-text-pink), 55px 7px 0 1px var(--color-black), 112px -1px 0 -3px var(--color-text-pink), 112px -1px 0 0 var(--color-black);
+}
+
+.frostingOne {
+    bottom: 155px;
+    width: 211px;
+}
+
+.frostingTwo {
+    bottom: 96px;
+    width: 281px;
+}
+
+.cakePlate {
+    bottom: 5px;
+    width: 315px;
+    height: 30px;
+    border: 4px solid var(--color-black);
+    border-radius: 50%;
+    background: #dff5ff;
+}
+
+.candle {
+    z-index: 4;
+    bottom: 180px;
+    width: 25px;
+    height: 66px;
+    border: 3px solid var(--color-black);
+    border-radius: 7px 7px 3px 3px;
+    background: repeating-linear-gradient(135deg, white 0 7px, var(--color-text-pink) 7px 14px);
+}
+
+.wick {
+    position: absolute;
+    left: 50%;
+    top: -12px;
+    width: 3px;
+    height: 12px;
+    background: var(--color-black);
+    transform: translateX(-50%);
+}
+
+.flame {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: -48px;
+    width: 26px;
+    height: 39px;
+    border: 3px solid var(--color-black);
+    border-radius: 50% 50% 48% 52% / 62% 60% 40% 38%;
+    background: radial-gradient(circle at 50% 70%, #fff7a1 0 22%, #ffd166 24% 54%, #ff7882 57%);
+    filter: drop-shadow(0 0 12px #ffd166);
+    transform: translateX(-50%) rotate(4deg);
+    transform-origin: center bottom;
+    animation: candleFlicker .7s infinite alternate ease-in-out;
+    transition: transform .35s ease, opacity .35s ease;
+}
+
+@keyframes candleFlicker {
+    to { transform: translateX(-50%) rotate(-5deg) scale(.92, 1.08); }
+}
+
+.candleButton.isOut .flame {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px) scale(.05);
+    animation: none;
+}
+
+.candleButton.isOut .wick::after {
+    content: "";
+    position: absolute;
+    left: -7px;
+    top: -18px;
+    width: 14px;
+    height: 14px;
+    border: 3px solid rgba(80, 80, 80, .45);
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    animation: smokeAway 1.5s ease-out forwards;
+}
+
+@keyframes smokeAway {
+    to { opacity: 0; transform: translate(15px, -34px) scale(1.8); }
+}
+
+.candleAction {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 9px 16px;
+    border: 2px solid var(--color-black);
+    border-radius: 999px;
+    background: white;
+    color: var(--color-black);
+    font: 700 .82rem "Poppins", sans-serif;
+    box-shadow: 0 4px 0 var(--color-black);
+}
+
+.candleButton.isOut .candleAction {
+    background: var(--color-text-pink);
+    color: white;
+}
+
+/* Hearts appear wherever the visitor taps the background. */
+.floatingTapHeart {
+    position: fixed;
+    z-index: 100000005;
+    color: var(--color-heart);
+    font-size: var(--heart-size);
+    line-height: 1;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.18));
+    transform: translate(-50%, -50%);
+    animation: tapHeartFloat 1.45s ease-out forwards;
+}
+
+@keyframes tapHeartFloat {
+    0% { opacity: 0; transform: translate(-50%, -35%) scale(.25) rotate(-8deg); }
+    15% { opacity: 1; transform: translate(-50%, -50%) scale(1.15) rotate(7deg); }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--drift)), -155px) scale(.75) rotate(-12deg); }
+}
+
+#celebrationLayer .celebrationParticle {
+    left: var(--burst-x, 50vw);
+    top: var(--burst-y, 58vh);
+}
+
+.letterSignature {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.letterSignature strong {
+    color: var(--color-black);
+    font-size: 1.2em;
+}
+
+@media screen and (max-width: 700px) {
+    .birthdayExtras {
+        width: min(100% - 24px, 560px);
+        margin-top: 26px;
+        gap: 20px;
+        padding-bottom: 96px;
+    }
+
+    .extraCard {
+        border-radius: 22px;
+        box-shadow: 5px 5px 0 var(--color-black);
+    }
+
+    .themePanel {
+        padding: 20px;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .themeSwitcher {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .themeButton {
+        flex: 1 1 90px;
+        justify-content: center;
+        padding-right: 9px;
+    }
+
+    .memorySection {
+        padding: 18px;
+    }
+
+    .sectionHeading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .sectionHeading .eyebrow {
+        max-width: none;
+    }
+
+    .sliderControls {
+        align-self: flex-end;
+    }
+
+    .memorySlide {
+        height: min(118vw, 470px);
+    }
+
+    .memorySlide::after {
+        inset: 30% 0 0;
+    }
+
+    .memoryCaption {
+        left: 18px;
+        right: 18px;
+        bottom: 20px;
+    }
+
+    .cakeSection {
+        min-height: auto;
+        padding: 28px 18px;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        text-align: center;
+    }
+
+    .cakeCopy > p:not(.eyebrow):not(.cakeStatus) {
+        margin-inline: auto;
+    }
+
+    .cakeStatus {
+        margin-top: 15px;
+    }
+
+    .candleButton {
+        min-height: 310px;
+    }
+
+    .cake {
+        transform: scale(.88);
+    }
+
+    .candleButton:hover .cake {
+        transform: scale(.88) translateY(-4px);
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .themeButton {
+        font-size: .72rem;
+    }
+
+    .themeSwatch {
+        width: 20px;
+        height: 20px;
+    }
+
+    .sliderControls button {
+        width: 42px;
+        height: 42px;
+    }
+
+    .cake {
+        transform: scale(.78);
+    }
+
+    .candleButton:hover .cake {
+        transform: scale(.78) translateY(-4px);
+    }
+}
+
+/* Surprise features live in focused popups, keeping the first page clean. */
+.birthdayExtras {
+    position: fixed;
+    inset: 0;
+    z-index: 10000000;
+    width: auto;
+    height: 100vh;
+    height: 100svh;
+    margin: 0;
+    padding: 0;
+    display: block;
+    pointer-events: none;
+}
+
+.featureBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: rgba(24, 18, 22, .72);
+    backdrop-filter: blur(7px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .3s ease, visibility .3s ease;
+}
+
+.birthdayExtras.hasModal {
+    pointer-events: auto;
+}
+
+.birthdayExtras.hasModal .featureBackdrop {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.birthdayExtras .extraCard {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.birthdayExtras .extraCard.isOpen {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.featureDialog {
+    position: fixed;
+    z-index: 2;
+    left: 50%;
+    top: 50%;
+    margin: 0;
+    transform: translate(-50%, -46%) scale(.96);
+    transition: opacity .3s ease, visibility .3s ease, transform .35s cubic-bezier(.2, .8, .2, 1);
+}
+
+.featureDialog.isOpen {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.featureClose {
+    position: absolute;
+    z-index: 20;
+    top: 14px;
+    right: 14px;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border: 2px solid var(--color-black);
+    border-radius: 50%;
+    background: var(--color-text-pink);
+    color: white;
+    box-shadow: 0 3px 0 var(--color-black);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+}
+
+.featureClose:hover,
+.featureClose:focus-visible {
+    background: var(--color-black);
+    outline: 3px solid white;
+}
+
+.memorySection.featureDialog {
+    width: min(1000px, calc(100vw - 44px));
+    max-height: 90vh;
+    max-height: 90svh;
+    padding: clamp(22px, 3vw, 34px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.memorySection.featureDialog .sectionHeading {
+    padding-right: 54px;
+    margin-bottom: 18px;
+}
+
+.memorySection.featureDialog .memorySlide {
+    height: min(54vh, 500px);
+    height: min(54svh, 500px);
+    min-height: 300px;
+}
+
+.cakeSection.featureDialog {
+    width: min(920px, calc(100vw - 44px));
+    min-height: 0;
+    max-height: 90vh;
+    max-height: 90svh;
+    padding: clamp(30px, 5vw, 58px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.themePanel {
+    position: fixed;
+    z-index: 3;
+    left: 50%;
+    bottom: 84px;
+    width: min(590px, calc(100vw - 28px));
+    margin: 0;
+    padding: 18px 20px;
+    transform: translate(-50%, 12px) scale(.97);
+    transition: opacity .25s ease, visibility .25s ease, transform .25s ease;
+}
+
+.themePanel.isOpen {
+    transform: translate(-50%, 0) scale(1);
+}
+
+.birthdayExtras.hasPopover {
+    pointer-events: none;
+}
+
+.birthdayExtras.hasPopover .themePanel {
+    pointer-events: auto;
+}
+
+.pageControls {
+    left: 50%;
+    bottom: max(14px, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    z-index: 100;
+    width: max-content;
+    max-width: calc(100vw - 20px);
+    padding: 7px;
+    border: 2px solid rgba(51, 51, 51, .8);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .8);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 20px rgba(0,0,0,.16);
+    gap: 7px;
+}
+
+.pageControls .controlButton {
+    box-shadow: none;
+}
+
+.pageControls .controlButton:active {
+    box-shadow: none;
+}
+
+@media screen and (max-width: 700px) {
+    #wrapper {
+        padding-bottom: 76px;
+    }
+
+    .pageControls {
+        gap: 5px;
+        padding: 6px;
+    }
+
+    .pageControls .controlButton {
+        width: 48px;
+        min-width: 48px;
+        height: 44px;
+        min-height: 44px;
+        padding: 0;
+        justify-content: center;
+        font-size: 1rem;
+    }
+
+    .pageControls .controlButton span {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .themePanel {
+        bottom: 76px;
+        padding: 18px;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .themePanel h2 {
+        font-size: 1.6rem;
+    }
+
+    .memorySection.featureDialog,
+    .cakeSection.featureDialog {
+        width: calc(100vw - 24px);
+        max-height: calc(100svh - 26px);
+        border-radius: 22px;
+    }
+
+    .memorySection.featureDialog {
+        padding: 18px;
+    }
+
+    .memorySection.featureDialog .sectionHeading {
+        padding-right: 48px;
+        margin-bottom: 14px;
+    }
+
+    .memorySection.featureDialog .memorySlide {
+        height: min(54svh, 460px);
+        min-height: 330px;
+    }
+
+    .memorySection.featureDialog .sliderControls {
+        align-self: flex-start;
+    }
+
+    .cakeSection.featureDialog {
+        padding: 52px 18px 24px;
+        grid-template-columns: 1fr;
+        gap: 6px;
+        text-align: center;
+    }
+
+    .cakeSection.featureDialog .candleButton {
+        min-height: 300px;
+    }
+
+    .featureClose {
+        top: 10px;
+        right: 10px;
+        width: 42px;
+        height: 42px;
+    }
+}
+
+@media screen and (orientation: landscape) and (max-height: 520px) {
+    .pageControls {
+        bottom: 7px;
+    }
+
+    .themePanel {
+        bottom: 68px;
+    }
+
+    .memorySection.featureDialog,
+    .cakeSection.featureDialog {
+        max-height: calc(100svh - 16px);
+    }
+
+    .memorySection.featureDialog {
+        width: min(820px, calc(100vw - 24px));
+        display: grid;
+        grid-template-columns: 230px minmax(0, 1fr);
+        gap: 16px;
+        align-items: center;
+    }
+
+    .memorySection.featureDialog .sectionHeading {
+        padding-right: 0;
+        margin: 0;
+    }
+
+    .memorySection.featureDialog .memorySlide {
+        height: calc(100svh - 92px);
+        min-height: 260px;
+    }
+
+    .memorySection.featureDialog .sliderDots {
+        grid-column: 2;
+        margin-top: -2px;
+    }
+
+    .cakeSection.featureDialog {
+        width: min(820px, calc(100vw - 24px));
+        padding: 42px 28px 12px;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .cakeSection.featureDialog .candleButton {
+        min-height: 300px;
+    }
 }
