@@ -187,6 +187,10 @@
                             <span>Happiness</span><span>Peace</span><span>Success</span><span>Love</span><span>Beautiful memories</span>
                         </div>
                     </div>
+                    <button class="relightCandleButton" id="relightCandleButton" type="button" hidden>
+                        <i class="fa-solid fa-fire-flame-curved" aria-hidden="true"></i>
+                        Relight candle
+                    </button>
                 </div>
                 <div class="candleButton" aria-hidden="true">
                     <span class="cake" aria-hidden="true">
@@ -313,6 +317,7 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     const micBlowButton = document.querySelector('#micBlowButton');
     const micStatus = document.querySelector('.micStatus');
     const wishReveal = document.querySelector('.wishReveal');
+    const relightCandleButton = document.querySelector('#relightCandleButton');
     const birthdayDate = '1 september';
     let dateTimer;
     let dateStartTimer;
@@ -401,6 +406,7 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         cakeStatus.textContent = 'The candle is waiting for your wish ✨';
         wishReveal.classList.remove('isVisible');
         wishReveal.setAttribute('aria-hidden', 'true');
+        relightCandleButton.hidden = true;
         wrapper.classList.add('replayReset');
         void wrapper.offsetWidth;
         wrapper.classList.remove('replayReset');
@@ -637,8 +643,20 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         cakeStatus.textContent = 'You blew it out! Your wish is on its way, Afia! 🎉💖';
         wishReveal.classList.add('isVisible');
         wishReveal.setAttribute('aria-hidden', 'false');
+        relightCandleButton.hidden = false;
         celebrate(`${candlePosition.left + candlePosition.width / 2}px`, `${candlePosition.top + 35}px`);
     }
+
+    function relightCandle() {
+        candleButton.classList.remove('isOut');
+        cakeStatus.textContent = 'The candle is glowing again. Enable the microphone when you are ready ✨';
+        wishReveal.classList.remove('isVisible');
+        wishReveal.setAttribute('aria-hidden', 'true');
+        relightCandleButton.hidden = true;
+        micStatus.textContent = 'Microphone is off. Enable it when you are ready to blow.';
+    }
+
+    relightCandleButton.addEventListener('click', relightCandle);
 
     function createFloatingHeart(x, y) {
         const heart = document.createElement('span');
