@@ -548,6 +548,17 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         microphoneSource.connect(blowAnalyser);
     }
 
+    function readMicrophoneVolume() {
+        const samples = new Uint8Array(blowAnalyser.fftSize);
+        blowAnalyser.getByteTimeDomainData(samples);
+        let energy = 0;
+        samples.forEach(sample => {
+            const normalizedSample = (sample - 128) / 128;
+            energy += normalizedSample * normalizedSample;
+        });
+        return Math.sqrt(energy / samples.length);
+    }
+
     candleButton.addEventListener('click', () => {
         const candleIsOut = candleButton.classList.toggle('isOut');
         if (candleIsOut) {
