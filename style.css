@@ -1809,6 +1809,45 @@ html[data-theme="blue"] {
     font-weight: 700;
 }
 
+.wishReveal {
+    max-height: 0;
+    margin-top: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: max-height .7s ease, margin-top .7s ease, opacity .6s ease, transform .7s ease;
+}
+
+.wishReveal > p {
+    color: #5d4949;
+    font: 700 clamp(1.05rem, 2.5vw, 1.35rem) "Dancing Script", cursive;
+    line-height: 1.4;
+}
+
+.wishWords {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.wishWords span {
+    padding: 7px 10px;
+    border: 2px solid var(--color-black);
+    border-radius: 999px;
+    background: white;
+    color: var(--color-text-pink);
+    font-size: .72rem;
+    font-weight: 700;
+}
+
+.wishReveal.isVisible {
+    max-height: 220px;
+    margin-top: 16px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
 .micBlowButton {
     min-height: 46px;
     margin-top: 18px;
