@@ -585,6 +585,36 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         blowAnimationFrame = requestAnimationFrame(monitorForBlow);
     }
 
+    async function startBlowDetection() {
+        micStatus.textContent = 'Waiting for microphone permission...';
+        micBlowButton.disabled = true;
+        try {
+            await requestBlowMicrophone();
+            blowBaseline = 0;
+            blowCalibrationSamples = 0;
+            blowStartedAt = 0;
+            micBlowButton.setAttribute('aria-pressed', 'true');
+            micBlowButton.querySelector('span').textContent = 'Microphone listening';
+            micBlowButton.querySelector('i').className = 'fa-solid fa-wave-square';
+            micStatus.classList.add('isListening');
+            micStatus.textContent = 'Listening… bring the phone close and blow steadily toward the microphone.';
+            blowAnimationFrame = requestAnimationFrame(monitorForBlow);
+        } catch (error) {
+            await stopBlowDetection(
+                error.name === 'NotAllowedError'
+                    ? 'Microphone permission was denied. You can still tap the candle.'
+                    : 'Microphone could not start. You can still tap the candle.'
+            );
+        } finally {
+            micBlowButton.disabled = false;
+        }
+    }
+
+    micBlowButton.addEventListener('click', () => {
+        if (micBlowButton.getAttribute('aria-pressed') === 'true') stopBlowDetection();
+        else startBlowDetection();
+    });
+
     candleButton.addEventListener('click', () => {
         const candleIsOut = candleButton.classList.toggle('isOut');
         if (candleIsOut) {
