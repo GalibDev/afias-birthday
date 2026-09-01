@@ -1449,6 +1449,123 @@ body.modalOpen {
     }
 }
 
+/* A tiny animated cake joins the balloons and stars on the home screen. */
+.homeCakeDecoration {
+    position: absolute;
+    z-index: 3;
+    left: clamp(22px, 7vw, 105px);
+    bottom: 105px;
+    width: 100px;
+    height: 105px;
+    opacity: 0;
+    transform: translateY(35px) scale(0);
+    transform-origin: center bottom;
+    pointer-events: none;
+    filter: drop-shadow(0 7px 0 rgba(51, 51, 51, .14));
+    animation: homeCakeArrive 1s 8s forwards cubic-bezier(.2, .9, .25, 1.2),
+               homeCakeFloat 3s 9s infinite ease-in-out;
+}
+
+.homeCakeBody,
+.homeCakeFrosting,
+.homeCakePlate,
+.homeCakeCandle,
+.homeCakeFlame {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.homeCakeBody {
+    bottom: 17px;
+    width: 82px;
+    height: 45px;
+    border: 3px solid var(--color-black);
+    border-radius: 9px 9px 12px 12px;
+    background: repeating-linear-gradient(90deg, #f4b183 0 10px, #ffd2aa 10px 20px);
+}
+
+.homeCakeFrosting {
+    z-index: 2;
+    bottom: 49px;
+    width: 86px;
+    height: 19px;
+    border: 3px solid var(--color-black);
+    border-radius: 50%;
+    background: var(--color-text-pink);
+}
+
+.homeCakePlate {
+    bottom: 8px;
+    width: 98px;
+    height: 16px;
+    border: 3px solid var(--color-black);
+    border-radius: 50%;
+    background: #dff5ff;
+}
+
+.homeCakeCandle {
+    z-index: 2;
+    bottom: 64px;
+    width: 12px;
+    height: 27px;
+    border: 2px solid var(--color-black);
+    border-radius: 3px;
+    background: repeating-linear-gradient(135deg, white 0 4px, var(--color-text-pink) 4px 8px);
+}
+
+.homeCakeFlame {
+    z-index: 3;
+    bottom: 91px;
+    width: 13px;
+    height: 18px;
+    border: 2px solid var(--color-black);
+    border-radius: 50% 50% 45% 55%;
+    background: #ffd166;
+    filter: drop-shadow(0 0 7px #ffd166);
+    transform-origin: center bottom;
+    animation: homeFlameFlicker .65s infinite alternate ease-in-out;
+}
+
+.homeCakeSpark {
+    position: absolute;
+    z-index: 4;
+    top: 14px;
+    color: var(--color-text-pink);
+    font-size: 14px;
+    animation: homeCakeSparkle 1.2s infinite alternate ease-in-out;
+}
+
+.homeCakeSpark.sparkLeft { left: 8px; }
+.homeCakeSpark.sparkRight { right: 5px; animation-delay: .45s; }
+
+@keyframes homeCakeArrive {
+    65% { opacity: 1; transform: translateY(-8px) scale(1.12) rotate(-3deg); }
+    100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+}
+
+@keyframes homeCakeFloat {
+    0%, 100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+    50% { opacity: 1; transform: translateY(-8px) scale(1) rotate(2deg); }
+}
+
+@keyframes homeFlameFlicker {
+    to { transform: translateX(-50%) scale(.85, 1.12) rotate(-6deg); }
+}
+
+@keyframes homeCakeSparkle {
+    from { opacity: .25; transform: scale(.65) rotate(0); }
+    to { opacity: 1; transform: scale(1.2) rotate(25deg); }
+}
+
+@media screen and (max-width: 700px) {
+    .homeCakeDecoration {
+        left: 12px;
+        bottom: 86px;
+        transform-origin: left bottom;
+    }
+}
+
 @media screen and (orientation: landscape) and (max-height: 520px) and (max-width: 950px) {
     #wrapper {
         min-height: 100svh;
