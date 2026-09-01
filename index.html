@@ -188,8 +188,8 @@
                     <p class="cakeStatus" aria-live="polite">The candle is waiting for your wish ✨</p>
                     <div class="wishReveal" aria-hidden="true">
                         <p>May this new chapter bring you everything your heart wishes for.</p>
-                        <div class="wishWords" aria-label="Happiness, peace, success, love and beautiful memories">
-                            <span>Happiness</span><span>Peace</span><span>Success</span><span>Love</span><span>Beautiful memories</span>
+                        <div class="wishWords" aria-label="Happiness, peace, success and beautiful memories">
+                            <span>Happiness</span><span>Peace</span><span>Success</span><span>Beautiful memories</span>
                         </div>
                     </div>
                     <button class="relightCandleButton" id="relightCandleButton" type="button" hidden>
@@ -747,11 +747,17 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         updateMusicButton(false, 'Play music');
     }
 
+    function removeMusicUnlockListeners() {
+        document.removeEventListener('touchstart', unlockDefaultMusic, true);
+        document.removeEventListener('pointerdown', unlockDefaultMusic, true);
+        document.removeEventListener('click', unlockDefaultMusic, true);
+        document.removeEventListener('keydown', unlockDefaultMusic);
+    }
+
     async function unlockDefaultMusic(event) {
-        if (event?.target.closest('#musicToggle')) return;
+        if (event?.target instanceof Element && event.target.closest('#musicToggle')) return;
         if (await playBirthdayMusic()) {
-            document.removeEventListener('pointerdown', unlockDefaultMusic);
-            document.removeEventListener('keydown', unlockDefaultMusic);
+            removeMusicUnlockListeners();
         }
     }
 
@@ -761,8 +767,12 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     });
     birthdayAudio.addEventListener('play', () => updateMusicButton(true, 'Stop music'));
     birthdayAudio.addEventListener('pause', () => updateMusicButton(false, 'Play music'));
-    document.addEventListener('pointerdown', unlockDefaultMusic);
+    document.addEventListener('touchstart', unlockDefaultMusic, { capture: true, passive: true });
+    document.addEventListener('pointerdown', unlockDefaultMusic, true);
+    document.addEventListener('click', unlockDefaultMusic, true);
     document.addEventListener('keydown', unlockDefaultMusic);
+    birthdayAudio.addEventListener('canplaythrough', playBirthdayMusic, { once: true });
+    window.addEventListener('pageshow', playBirthdayMusic, { once: true });
     playBirthdayMusic();
     scheduleBirthdayDate();
 </script>
