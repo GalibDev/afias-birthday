@@ -511,6 +511,22 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         });
     });
 
+    async function stopBlowDetection(message = 'Microphone is off. Tap the button to blow out the candle.') {
+        if (blowAnimationFrame) cancelAnimationFrame(blowAnimationFrame);
+        blowAnimationFrame = undefined;
+        blowStartedAt = 0;
+        if (blowStream) blowStream.getTracks().forEach(track => track.stop());
+        blowStream = undefined;
+        if (blowAudioContext && blowAudioContext.state !== 'closed') await blowAudioContext.close();
+        blowAudioContext = undefined;
+        blowAnalyser = undefined;
+        micBlowButton.setAttribute('aria-pressed', 'false');
+        micBlowButton.querySelector('span').textContent = 'Enable blow detection';
+        micBlowButton.querySelector('i').className = 'fa-solid fa-microphone';
+        micStatus.classList.remove('isListening');
+        micStatus.textContent = message;
+    }
+
     candleButton.addEventListener('click', () => {
         const candleIsOut = candleButton.classList.toggle('isOut');
         if (candleIsOut) {
