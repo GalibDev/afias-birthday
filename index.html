@@ -174,12 +174,17 @@
                 <div class="cakeCopy">
                     <p class="eyebrow">One last birthday wish</p>
                     <h2 id="cakeTitle">Make a wish, Afia!</h2>
-                    <p>Enable the microphone, bring your phone close, and blow steadily to make your wish.</p>
+                    <p>Enable the microphone and blow steadily toward it to make your wish.</p>
                     <button class="micBlowButton" id="micBlowButton" type="button" aria-pressed="false">
                         <i class="fa-solid fa-microphone" aria-hidden="true"></i>
                         <span>Enable blow detection</span>
                     </button>
                     <p class="micStatus" aria-live="polite">Microphone is off. Enable it when you are ready to blow.</p>
+                    <div class="micPermissionHelp" hidden>
+                        <strong>Microphone is blocked in this browser.</strong>
+                        <span>Chrome/Edge desktop: click the lock icon beside the address, allow Microphone, then reload.</span>
+                        <span>iPhone Chrome: open iPhone Settings → Chrome → Microphone. Safari normally shows its own permission popup.</span>
+                    </div>
                     <p class="cakeStatus" aria-live="polite">The candle is waiting for your wish ✨</p>
                     <div class="wishReveal" aria-hidden="true">
                         <p>May this new chapter bring you everything your heart wishes for.</p>
@@ -192,11 +197,12 @@
                         Relight candle
                     </button>
                 </div>
-                <div class="candleButton" aria-hidden="true">
-                    <span class="cake" aria-hidden="true">
+                <div class="candleButton">
+                    <span class="cake">
                         <span class="candle">
                             <span class="smokePuffs"><i></i><i></i><i></i></span>
                             <span class="flame"></span>
+                            <button class="desktopFlameButton" type="button" aria-label="Extinguish candle flame"></button>
                             <span class="wick"></span>
                         </span>
                         <span class="frosting frostingOne"></span>
@@ -264,6 +270,7 @@
         </div>
 
         <div id="celebrationLayer" aria-hidden="true"></div>
+        <audio id="birthdayAudio" src="./music/birthdaymusic.mp3" loop preload="auto" autoplay playsinline></audio>
 
         <div class="boxMail" role="dialog" aria-modal="true" aria-labelledby="letterTitle" aria-hidden="true">
             <button class="closeMail" type="button" aria-label="Close birthday letter">
@@ -328,6 +335,9 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     const micStatus = document.querySelector('.micStatus');
     const wishReveal = document.querySelector('.wishReveal');
     const relightCandleButton = document.querySelector('#relightCandleButton');
+    const micPermissionHelp = document.querySelector('.micPermissionHelp');
+    const desktopFlameButton = document.querySelector('.desktopFlameButton');
+    const birthdayAudio = document.querySelector('#birthdayAudio');
     const birthdayDate = '1 september';
     let dateTimer;
     let dateStartTimer;
@@ -612,10 +622,27 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         blowAnimationFrame = requestAnimationFrame(monitorForBlow);
     }
 
+    async function getMicrophonePermissionState() {
+        if (!navigator.permissions?.query) return 'unknown';
+        try {
+            const permission = await navigator.permissions.query({ name: 'microphone' });
+            return permission.state;
+        } catch {
+            return 'unknown';
+        }
+    }
+
     async function startBlowDetection() {
         micStatus.textContent = 'Waiting for microphone permission...';
+        micPermissionHelp.hidden = true;
         micBlowButton.disabled = true;
         try {
+            const permissionState = await getMicrophonePermissionState();
+            if (permissionState === 'denied') {
+                micPermissionHelp.hidden = false;
+                micStatus.textContent = 'Microphone was previously blocked. Allow it from browser/site settings, reload, then try again.';
+                return;
+            }
             await requestBlowMicrophone();
             blowBaseline = 0;
             blowCalibrationSamples = 0;
@@ -625,8 +652,10 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
             micBlowButton.querySelector('i').className = 'fa-solid fa-wave-square';
             micStatus.classList.add('isListening');
             micStatus.textContent = 'Listening… bring the phone close and blow steadily toward the microphone.';
+            micPermissionHelp.hidden = true;
             blowAnimationFrame = requestAnimationFrame(monitorForBlow);
         } catch (error) {
+            if (error.name === 'NotAllowedError') micPermissionHelp.hidden = false;
             await stopBlowDetection(
                 error.name === 'NotAllowedError'
                     ? 'Microphone permission was denied. Allow microphone access to blow out the candle.'
@@ -646,11 +675,13 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         if (document.hidden && (blowStream || blowAudioContext)) stopBlowDetection();
     });
 
-    function extinguishCandle() {
+    function extinguishCandle(source = 'blow') {
         if (candleButton.classList.contains('isOut')) return;
         const candlePosition = candleButton.getBoundingClientRect();
         candleButton.classList.add('isOut');
-        cakeStatus.textContent = 'You blew it out! Your wish is on its way, Afia! 🎉💖';
+        cakeStatus.textContent = source === 'click'
+            ? 'The flame is out! Your wish is on its way, Afia! 🎉💖'
+            : 'You blew it out! Your wish is on its way, Afia! 🎉💖';
         wishReveal.classList.add('isVisible');
         wishReveal.setAttribute('aria-hidden', 'false');
         relightCandleButton.hidden = false;
@@ -667,6 +698,11 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     }
 
     relightCandleButton.addEventListener('click', relightCandle);
+
+    desktopFlameButton.addEventListener('click', () => {
+        extinguishCandle('click');
+        if (blowStream || blowAudioContext) stopBlowDetection('Flame clicked — microphone is now off.');
+    });
 
     function createFloatingHeart(x, y) {
         const heart = document.createElement('span');
@@ -685,52 +721,49 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         createFloatingHeart(event.clientX, event.clientY);
     });
 
-    let audioContext;
-    let melodyTimer;
-    let noteIndex = 0;
-    const melody = [523.25, 659.25, 783.99, 659.25, 698.46, 880, 783.99, 659.25];
+    birthdayAudio.volume = .6;
 
-    function playNote() {
-        if (!audioContext) return;
-        const oscillator = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        const now = audioContext.currentTime;
-        oscillator.type = 'sine';
-        oscillator.frequency.value = melody[noteIndex++ % melody.length];
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.exponentialRampToValueAtTime(0.08, now + 0.03);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
-        oscillator.connect(gain).connect(audioContext.destination);
-        oscillator.start(now);
-        oscillator.stop(now + 0.4);
+    function updateMusicButton(isPlaying, title) {
+        musicToggle.setAttribute('aria-pressed', String(isPlaying));
+        musicToggle.title = title;
+        musicToggle.querySelector('i').className = isPlaying
+            ? 'fa-solid fa-volume-high'
+            : 'fa-solid fa-volume-xmark';
     }
 
-    async function toggleMusic() {
-        const isPlaying = musicToggle.getAttribute('aria-pressed') === 'true';
-        if (isPlaying) {
-            clearInterval(melodyTimer);
-            melodyTimer = undefined;
-            if (audioContext) await audioContext.close();
-            audioContext = undefined;
-            musicToggle.setAttribute('aria-pressed', 'false');
-            musicToggle.title = 'Play music';
-            musicToggle.querySelector('i').className = 'fa-solid fa-volume-xmark';
-            return;
+    async function playBirthdayMusic() {
+        try {
+            await birthdayAudio.play();
+            updateMusicButton(true, 'Stop music');
+            return true;
+        } catch {
+            updateMusicButton(false, 'Tap to start music');
+            return false;
         }
-
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContextClass) return;
-        audioContext = new AudioContextClass();
-        await audioContext.resume();
-        noteIndex = 0;
-        playNote();
-        melodyTimer = window.setInterval(playNote, 430);
-        musicToggle.setAttribute('aria-pressed', 'true');
-        musicToggle.title = 'Stop music';
-        musicToggle.querySelector('i').className = 'fa-solid fa-volume-high';
     }
 
-    musicToggle.addEventListener('click', toggleMusic);
+    function pauseBirthdayMusic() {
+        birthdayAudio.pause();
+        updateMusicButton(false, 'Play music');
+    }
+
+    async function unlockDefaultMusic(event) {
+        if (event?.target.closest('#musicToggle')) return;
+        if (await playBirthdayMusic()) {
+            document.removeEventListener('pointerdown', unlockDefaultMusic);
+            document.removeEventListener('keydown', unlockDefaultMusic);
+        }
+    }
+
+    musicToggle.addEventListener('click', () => {
+        if (birthdayAudio.paused) playBirthdayMusic();
+        else pauseBirthdayMusic();
+    });
+    birthdayAudio.addEventListener('play', () => updateMusicButton(true, 'Stop music'));
+    birthdayAudio.addEventListener('pause', () => updateMusicButton(false, 'Play music'));
+    document.addEventListener('pointerdown', unlockDefaultMusic);
+    document.addEventListener('keydown', unlockDefaultMusic);
+    playBirthdayMusic();
     scheduleBirthdayDate();
 </script>
 

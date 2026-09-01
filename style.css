@@ -2083,6 +2083,31 @@ html[data-theme="blue"] {
     animation: listeningPulse 1s infinite alternate;
 }
 
+.micPermissionHelp {
+    max-width: 500px;
+    margin-top: 13px;
+    padding: 12px 14px;
+    border: 2px solid #d49a34;
+    border-radius: 14px;
+    background: #fff7df;
+    color: #664f26;
+    font-size: .74rem;
+    line-height: 1.45;
+}
+
+.micPermissionHelp[hidden] {
+    display: none;
+}
+
+.micPermissionHelp strong,
+.micPermissionHelp span {
+    display: block;
+}
+
+.micPermissionHelp span {
+    margin-top: 5px;
+}
+
 @keyframes listeningPulse {
     to { transform: scale(1.3); }
 }
@@ -2216,6 +2241,38 @@ html[data-theme="blue"] {
     transform-origin: center bottom;
     animation: candleFlicker .7s infinite alternate ease-in-out;
     transition: transform .35s ease, opacity .35s ease;
+}
+
+.desktopFlameButton {
+    display: none;
+}
+
+@media screen and (min-width: 701px) {
+    .desktopFlameButton {
+        position: absolute;
+        z-index: 8;
+        left: 50%;
+        top: -55px;
+        display: block;
+        width: 48px;
+        height: 58px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        cursor: pointer;
+        transform: translateX(-50%);
+    }
+
+    .desktopFlameButton:hover,
+    .desktopFlameButton:focus-visible {
+        outline: 3px dashed var(--color-text-pink);
+        outline-offset: 3px;
+    }
+
+    .candleButton.isOut .desktopFlameButton {
+        pointer-events: none;
+    }
 }
 
 @keyframes candleFlicker {
