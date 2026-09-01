@@ -470,6 +470,7 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         const shouldClose = openFeatureName === name;
         closeFeatures(false);
         if (shouldClose) return;
+        if (name === 'cake') pauseBirthdayMusic();
         const panel = featurePanels[name];
         const opener = featureButtons[name];
         featureLastFocus = opener;
@@ -689,6 +690,7 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
         wishReveal.setAttribute('aria-hidden', 'false');
         relightCandleButton.hidden = false;
         celebrate(`${candlePosition.left + candlePosition.width / 2}px`, `${candlePosition.top + 35}px`);
+        playBirthdayMusic();
     }
 
     function relightCandle() {
