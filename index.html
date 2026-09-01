@@ -259,8 +259,8 @@
                 <i class="fa-solid fa-palette" aria-hidden="true"></i>
                 <span>Theme</span>
             </button>
-            <button class="controlButton" id="musicToggle" type="button" aria-pressed="false" title="Play music">
-                <i class="fa-solid fa-volume-xmark" aria-hidden="true"></i>
+            <button class="controlButton" id="musicToggle" type="button" aria-pressed="true" title="Music on — starts on your first tap if needed">
+                <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
                 <span>Music</span>
             </button>
             <button class="controlButton" id="replayButton" type="button" title="Replay animation">
@@ -727,6 +727,7 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     });
 
     birthdayAudio.volume = .6;
+    let musicEnabled = true;
 
     function updateMusicButton(isPlaying, title) {
         musicToggle.setAttribute('aria-pressed', String(isPlaying));
@@ -737,17 +738,23 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     }
 
     async function playBirthdayMusic() {
+        musicEnabled = true;
         try {
             await birthdayAudio.play();
+            if (!musicEnabled) {
+                birthdayAudio.pause();
+                return false;
+            }
             updateMusicButton(true, 'Stop music');
             return true;
         } catch {
-            updateMusicButton(false, 'Tap to start music');
+            if (musicEnabled) updateMusicButton(true, 'Music on — starts on your first tap if needed');
             return false;
         }
     }
 
     function pauseBirthdayMusic() {
+        musicEnabled = false;
         birthdayAudio.pause();
         updateMusicButton(false, 'Play music');
     }
@@ -761,23 +768,36 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
 
     async function unlockDefaultMusic(event) {
         if (event?.target instanceof Element && event.target.closest('#musicToggle')) return;
+        if (!musicEnabled) return;
         if (await playBirthdayMusic()) {
             removeMusicUnlockListeners();
         }
     }
 
     musicToggle.addEventListener('click', () => {
-        if (birthdayAudio.paused) playBirthdayMusic();
-        else pauseBirthdayMusic();
+        if (musicEnabled) pauseBirthdayMusic();
+        else playBirthdayMusic();
     });
-    birthdayAudio.addEventListener('play', () => updateMusicButton(true, 'Stop music'));
-    birthdayAudio.addEventListener('pause', () => updateMusicButton(false, 'Play music'));
+    birthdayAudio.addEventListener('play', () => {
+        if (musicEnabled) updateMusicButton(true, 'Stop music');
+        else birthdayAudio.pause();
+    });
+    birthdayAudio.addEventListener('pause', () => {
+        updateMusicButton(
+            musicEnabled,
+            musicEnabled ? 'Music on — starts on your first tap if needed' : 'Play music'
+        );
+    });
     document.addEventListener('touchstart', unlockDefaultMusic, { capture: true, passive: true });
     document.addEventListener('pointerdown', unlockDefaultMusic, true);
     document.addEventListener('click', unlockDefaultMusic, true);
     document.addEventListener('keydown', unlockDefaultMusic);
-    birthdayAudio.addEventListener('canplaythrough', playBirthdayMusic, { once: true });
-    window.addEventListener('pageshow', playBirthdayMusic, { once: true });
+    birthdayAudio.addEventListener('canplaythrough', () => {
+        if (musicEnabled) playBirthdayMusic();
+    }, { once: true });
+    window.addEventListener('pageshow', () => {
+        if (musicEnabled) playBirthdayMusic();
+    }, { once: true });
     playBirthdayMusic();
     scheduleBirthdayDate();
 </script>
