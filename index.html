@@ -301,6 +301,8 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     const galleryNext = document.querySelector('#galleryNext');
     const candleButton = document.querySelector('.candleButton');
     const cakeStatus = document.querySelector('.cakeStatus');
+    const micBlowButton = document.querySelector('#micBlowButton');
+    const micStatus = document.querySelector('.micStatus');
     const birthdayDate = '1 september';
     let dateTimer;
     let dateStartTimer;
@@ -308,6 +310,11 @@ Always remember, I'm here for you 🤗 whenever you need me. You can talk to me 
     let lastFocusedElement;
     let featureLastFocus;
     let openFeatureName = '';
+    let blowStream;
+    let blowAudioContext;
+    let blowAnalyser;
+    let blowAnimationFrame;
+    let blowStartedAt = 0;
 
     function typeBirthdayDate() {
         clearInterval(dateTimer);
